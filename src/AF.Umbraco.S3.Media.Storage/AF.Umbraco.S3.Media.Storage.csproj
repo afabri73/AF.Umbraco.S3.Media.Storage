@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -22,7 +21,7 @@
     <PackageIcon>Logo.jpg</PackageIcon>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\..\brand\Logo.jpg">
+    <None Include="..\..\brand\Logo.jpg" Pack="true" PackagePath="\" Link="Logo.jpg">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
@@ -35,7 +34,6 @@
     <PackageReference Include="Umbraco.Cms.Web.Common" Version="17.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Keep the same manifest resource names after moving .resx files to Resources/ -->
     <EmbeddedResource Update="Resources/AWSS3FileSystem.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem" />
     <EmbeddedResource Update="Resources/AWSS3FileSystem.da-DK.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem.da-DK" />
     <EmbeddedResource Update="Resources/AWSS3FileSystem.de-DE.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem.de-DE" />
