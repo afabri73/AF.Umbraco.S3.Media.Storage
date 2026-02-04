@@ -1,0 +1,78 @@
+# ------------------------------
+# OS files
+# ------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ------------------------------
+# IDE / editor
+# ------------------------------
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.rsuser
+*.sln.docstates
+
+# Keep shared VS Code project config, ignore everything else
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+
+# ------------------------------
+# Build output
+# ------------------------------
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+publish/
+TestResults/
+BenchmarkDotNet.Artifacts/
+
+# NuGet package artifacts
+*.nupkg
+*.snupkg
+
+# ------------------------------
+# Logs / temp / cache
+# ------------------------------
+*.log
+*.tmp
+*.temp
+*.pid
+build.out/
+build.tmp/
+Build/temp/
+
+# ------------------------------
+# Coverage
+# ------------------------------
+coverage/
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+
+# ------------------------------
+# Umbraco runtime data (local/dev)
+# ------------------------------
+src/Umbraco.Cms.17.x/umbraco/Data/
+src/Umbraco.Cms.17.x/umbraco/Logs/
+src/Umbraco.Cms.17.x/wwwroot/media/
+src/Umbraco.Cms.17.x/wwwroot/cache/
+src/Umbraco.Cms.17.x/wwwroot/umbraco/
+
+# Local-only config variants
+appsettings.Local.json
+src/Umbraco.Cms.17.x/appsettings.Local.json
+appsettings.*.local.json
+src/Umbraco.Cms.17.x/appsettings.*.local.json
+*.log
+*.binlog

@@ -1,0 +1,13 @@
+title = "AF.Umbraco.S3.Media.Storage Gitleaks Config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Ignore generated and build artifacts"
+paths = [
+  '''^src/.*/bin/''',
+  '''^src/.*/obj/''',
+  '''^msbuild\.log$''',
+  '''^msbuild\.binlog$'''
+]

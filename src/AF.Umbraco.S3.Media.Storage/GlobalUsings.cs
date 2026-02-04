@@ -1,0 +1,12 @@
+global using AF.Umbraco.S3.Media.Storage.Composers;
+global using AF.Umbraco.S3.Media.Storage.Core;
+global using AF.Umbraco.S3.Media.Storage.Exceptions;
+global using AF.Umbraco.S3.Media.Storage.Extensions;
+global using AF.Umbraco.S3.Media.Storage.Interfaces;
+global using AF.Umbraco.S3.Media.Storage.Middlewares;
+global using AF.Umbraco.S3.Media.Storage.Options;
+global using AF.Umbraco.S3.Media.Storage.Providers;
+global using AF.Umbraco.S3.Media.Storage.Resolvers;
+global using AF.Umbraco.S3.Media.Storage.Services;
+global using Umbraco.Cms.Core.Composing;
+global using Umbraco.Cms.Core.DependencyInjection;

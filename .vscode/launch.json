@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Umbraco (Kestrel)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Umbraco.Cms.17.x/Umbraco.Cms.17.x.csproj",
+      "preLaunchTask": "build Umbraco.Cms.17.x"
+    },
+    {
+      "name": "Umbraco (IIS Express)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Umbraco.Cms.17.x/Umbraco.Cms.17.x.csproj",
+      "preLaunchTask": "build Umbraco.Cms.17.x"
+    }
+  ]
+}

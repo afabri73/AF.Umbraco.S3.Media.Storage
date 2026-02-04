@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="InvalidImageFileMessage" xml:space="preserve">
+    <value>Le fichier selectionne '{0}' ne peut pas etre enregistre car les donnees image ne sont pas valides. Un apercu peut quand meme apparaitre avant l'enregistrement car il est genere localement par le navigateur.</value>
+  </data>
+  <data name="UploadToS3FailedMessage" xml:space="preserve">
+    <value>Impossible de televerser le fichier '{0}' vers le stockage S3. Veuillez reessayer plus tard.</value>
+  </data>
+  <data name="DeleteFromS3FailedMessage" xml:space="preserve">
+    <value>Impossible de supprimer '{0}' du stockage S3. Veuillez reessayer plus tard.</value>
+  </data>
+  <data name="CacheToS3FailedMessage" xml:space="preserve">
+    <value>Impossible de mettre '{0}' en cache sur le stockage S3. Veuillez reessayer plus tard.</value>
+  </data>
+</root>

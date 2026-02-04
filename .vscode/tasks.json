@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build Umbraco.Cms.17.x",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/Umbraco.Cms.17.x/Umbraco.Cms.17.x.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:Summary;ErrorsOnly",
+        "/v:minimal",
+        "/bl:${workspaceFolder}/msbuild.binlog",
+        "/flp:logfile=${workspaceFolder}/msbuild.log;verbosity=diagnostic"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/usr/local/share/dotnet:${env:PATH}"
+        }
+      }
+    }
+  ]
+}

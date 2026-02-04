@@ -1,0 +1,44 @@
+name: Build Release to NuGet
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PROJECT_PATH: src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
+  PACKAGE_OUTPUT_DIRECTORY: output
+
+jobs:
+  build-pack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore $PROJECT_PATH
+
+      - name: Build
+        run: dotnet build $PROJECT_PATH -c Release --no-restore /p:GeneratePackageOnBuild=false
+
+      - name: Pack (manual only, version from csproj)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: dotnet pack $PROJECT_PATH -c Release --no-build -o $PACKAGE_OUTPUT_DIRECTORY
+
+      - name: Upload package artifact
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkg
+          path: output/*.nupkg

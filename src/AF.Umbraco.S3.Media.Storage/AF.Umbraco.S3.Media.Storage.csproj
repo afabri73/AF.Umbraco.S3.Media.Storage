@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591;1573;1574</NoWarn>
+    <Title>AF Umbraco S3 Media Storage</Title>
+    <Authors>Adriano Fabri</Authors>
+    <Version>1.0.0</Version>
+    <Copyright>©2026 Adriano Fabri</Copyright>
+    <Description>Production-ready AWS S3 media storage provider for Umbraco 17 (.NET 10), fully ported/refactored from Our.Umbraco.StorageProviders.AWSS3 to support Umbraco 17 and .NET 10, then optimized and extended with media delivery middleware, ImageSharp integration, localized upload validation, and configurable cache retention cleanup. For ease of management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.</Description>
+    <PackageId>AF.Umbraco.S3.Media.Storage</PackageId>
+    <PackageTags>umbraco;aws;s3;umbraco17;umbraco-marketplace</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/afabri73/AF.Umbraco.S3.Media.Storage</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/afabri73/AF.Umbraco.S3.Media.Storage</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>1.0.0: Initial release of the AF Umbraco S3 Media Storage package, providing a production-ready AWS S3 media storage provider for Umbraco 17 (.NET 10) with media delivery middleware, ImageSharp integration, localized upload validation, and configurable cache retention cleanup.</PackageReleaseNotes>
+    <PackageIconUrl />
+    <PackageIcon>Logo.jpg</PackageIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\brand\Logo.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.22" />
+    <PackageReference Include="AWSSDK.S3" Version="4.0.18.1" />
+    <PackageReference Include="SixLabors.ImageSharp.Web.Providers.AWS" Version="3.2.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="17.1.0" />
+  </ItemGroup>
+</Project>

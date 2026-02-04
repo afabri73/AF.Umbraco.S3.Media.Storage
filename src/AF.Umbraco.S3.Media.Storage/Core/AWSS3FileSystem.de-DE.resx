@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="InvalidImageFileMessage" xml:space="preserve">
+    <value>Die ausgewaehlte Datei '{0}' kann nicht gespeichert werden, weil die Bilddaten ungueltig sind. Vor dem Speichern kann trotzdem eine Vorschau erscheinen, da sie lokal im Browser erzeugt wird.</value>
+  </data>
+  <data name="UploadToS3FailedMessage" xml:space="preserve">
+    <value>Datei '{0}' kann nicht in den S3-Speicher hochgeladen werden. Bitte spaeter erneut versuchen.</value>
+  </data>
+  <data name="DeleteFromS3FailedMessage" xml:space="preserve">
+    <value>'{0}' kann nicht aus dem S3-Speicher geloescht werden. Bitte spaeter erneut versuchen.</value>
+  </data>
+  <data name="CacheToS3FailedMessage" xml:space="preserve">
+    <value>'{0}' kann nicht im S3-Speicher gecacht werden. Bitte spaeter erneut versuchen.</value>
+  </data>
+</root>

@@ -1,0 +1,30 @@
+{
+  "git.ignoreLimitWarning": true,
+  "terminal.integrated.automationProfile.osx": {
+    "path": "/bin/zsh"
+  },
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "path": "/bin/zsh"
+    }
+  },
+  "terminal.integrated.shell.osx": "/bin/zsh",
+  "dotnetAcquisitionExtension.existingDotnetPath": [
+    {
+      "extensionId": "ms-dotnettools.csdevkit",
+      "path": "/usr/local/share/dotnet/dotnet"
+    },
+    {
+      "extensionId": "ms-dotnettools.csharp",
+      "path": "/usr/local/share/dotnet/dotnet"
+    },
+    {
+      "extensionId": "ms-dotnettools.vscode-dotnet-runtime",
+      "path": "/usr/local/share/dotnet/dotnet"
+    }
+  ],
+  "terminal.integrated.env.osx": {
+    "PATH": "/usr/local/share/dotnet:${env:PATH}"
+  }
+}

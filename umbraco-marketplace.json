@@ -1,0 +1,42 @@
+{
+    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
+    "AuthorDetails": {
+      "Name": "Adriano Fabri",
+      "Description": "A full stack developer with a particular focus on .NET, Angular and NodeJS development.",
+      "Url": "https://www.linkedin.com/in/fabriadriano/",
+      "ImageUrl": "https://avatars.githubusercontent.com/u/6714121?s=400&u=154a98a8bd78a87af042628f2c6b0ef1e8a9d0ea&v=4"
+    },
+    "Category": "Developer Tools",
+    "Description": "AWS S3 media storage provider for Umbraco 17 (.NET 10). Based on original Our.Umbraco.StorageProviders.AWSS3 project (not compatible with Umbraco 17), the new project is fully refactored, optimized and extended for .NET 10 and Umbraco 17. Includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.",
+    "DocumentationUrl": "",
+    "LicenseTypes": [ "Free" ],
+    "IssueTrackerUrl": "",
+    "PackageType": "Package",
+    "Screenshots": [
+      {
+        "ImageUrl": "",
+        "Caption": "Image in the backoffice and its corresponding file in the S3 bucket"
+      },
+      {
+        "ImageUrl": "",
+        "Caption": "Document in the backoffice and its correspnding file in the S3 bucket"
+      },
+      {
+        "ImageUrl": "",
+        "Caption": "Cached images in use and its corresponding file in the S3 bucket"
+      },
+      {
+        "ImageUrl": "",
+        "Caption": "At a glance - Minimum appsettings.json and startup.cs updates required"
+      }
+    ],
+    "Tags": [
+      "Media",
+      "AWS",
+      "S3",
+      "FileSystemProvider",
+      "Images",
+      "Storage"
+    ],
+    "Title": "AF Umbraco S3 Media Storage"
+  }
