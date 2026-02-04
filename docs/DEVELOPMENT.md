@@ -22,9 +22,10 @@ dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
 
 ## Localization behavior
 - User-facing alert messages are localized via `.resx` resources.
-- Resource files are stored under `src/AF.Umbraco.S3.Media.Storage/Core`.
+- Resource files are stored under `src/AF.Umbraco.S3.Media.Storage/Resources`.
 - Neutral/default fallback is `AWSS3FileSystem.resx` (English content).
 - If a user culture-specific resource is available (for example `it-IT`), it is used automatically; otherwise the default English resource is used.
+- `AF.Umbraco.S3.Media.Storage.csproj` keeps explicit `EmbeddedResource` mappings so manifest names remain `AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem*` for runtime compatibility.
 
 ## Documentation standards
 - XML comments are required for classes, interfaces, methods, functions, and properties across the package codebase.

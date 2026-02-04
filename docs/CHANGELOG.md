@@ -17,8 +17,8 @@ _Last updated: 2026-02-04_
   - build on push
   - manual workflow run to generate `.nupkg`
   - manual upload to NuGet.
-- Moved all `AWSS3FileSystem*.resx` localization resources to `Core/`.
-- Removed explicit `.csproj` resource mappings now that resources follow the default SDK embedding convention.
+- Moved all `AWSS3FileSystem*.resx` localization resources to `Resources/`.
+- Added explicit `.csproj` resource mappings to preserve manifest names used by runtime localization lookup.
 
 ## 2.1.0 - 2026-02-02
 

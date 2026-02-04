@@ -18,6 +18,7 @@ This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 - `Middlewares/`: HTTP middleware integration points.
 - `Options/`: Configuration option models.
 - `Providers/`: External provider integrations.
+- `Resources/`: Localized `.resx` resources for user-facing alert messages.
 - `Resolvers/`: Runtime resolution and strategy helpers.
 - `Services/`: Application services and orchestration logic.
 
@@ -25,8 +26,8 @@ This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 - `src/AF.Umbraco.S3.Media.Storage/Core/AWSS3FileSystem.cs`: main S3 filesystem implementation and cache flow.
 
 ## Localization resources
-- Localized resource files for `AWSS3FileSystem` are centralized in `src/AF.Umbraco.S3.Media.Storage/Core`.
-- Resource embedding uses the default SDK convention from `Core/AWSS3FileSystem*.resx` (no custom project mapping required).
+- Localized resource files for `AWSS3FileSystem` are centralized in `src/AF.Umbraco.S3.Media.Storage/Resources`.
+- Resource embedding is configured in `src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj` with explicit `EmbeddedResource` mappings to preserve runtime manifest names.
 
 <!-- DOCSYNC:START -->
 ## Implementation Notes (Code-Aligned)
