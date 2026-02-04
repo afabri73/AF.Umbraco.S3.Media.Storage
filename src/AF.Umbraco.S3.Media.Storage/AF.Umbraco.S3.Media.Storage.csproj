@@ -34,4 +34,14 @@
     <PackageReference Include="SixLabors.ImageSharp.Web.Providers.AWS" Version="3.2.0" />
     <PackageReference Include="Umbraco.Cms.Web.Common" Version="17.1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Keep the same manifest resource names after moving .resx files to Resources/ -->
+    <EmbeddedResource Update="Resources/AWSS3FileSystem.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem" />
+    <EmbeddedResource Update="Resources/AWSS3FileSystem.da-DK.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem.da-DK" />
+    <EmbeddedResource Update="Resources/AWSS3FileSystem.de-DE.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem.de-DE" />
+    <EmbeddedResource Update="Resources/AWSS3FileSystem.en-US.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem.en-US" />
+    <EmbeddedResource Update="Resources/AWSS3FileSystem.es-ES.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem.es-ES" />
+    <EmbeddedResource Update="Resources/AWSS3FileSystem.fr-FR.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem.fr-FR" />
+    <EmbeddedResource Update="Resources/AWSS3FileSystem.it-IT.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem.it-IT" />
+  </ItemGroup>
 </Project>
