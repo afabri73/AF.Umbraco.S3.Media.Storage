@@ -8,7 +8,7 @@
     <Authors>Adriano Fabri</Authors>
     <Version>1.0.0</Version>
     <Copyright>©2026 Adriano Fabri</Copyright>
-    <Description>Production-ready AWS S3 media storage provider for Umbraco 17 (.NET 10), fully ported/refactored from Our.Umbraco.StorageProviders.AWSS3 to support Umbraco 17 and .NET 10, then optimized and extended with media delivery middleware, ImageSharp integration, localized upload validation, and configurable cache retention cleanup. For ease of management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.</Description>
+    <Description>AWS S3 media storage provider for Umbraco 17 (.NET 10). Based on original Our.Umbraco.StorageProviders.AWSS3 project (not compatible with Umbraco 17), the new project is fully refactored, optimized and extended for .NET 10 and Umbraco 17. Includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.</Description>
     <PackageId>AF.Umbraco.S3.Media.Storage</PackageId>
     <PackageTags>umbraco;aws;s3;umbraco17;umbraco-marketplace</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -1,9 +1,7 @@
 # Changelog
 
-_Last updated: 2026-02-04_
-
-## Unreleased
-
+## [1.0.0] - 2026-02-05
+- Aligned release metadata and documentation with the current package naming.
 - Added startup S3 connectivity validation that blocks Umbraco boot on AWS connection failures.
 - Added standardized package logging prefix `[AFUS3MS]` with English messages for filtering.
 - Added localized user alerts for S3 upload, cache and delete failures.
@@ -19,9 +17,6 @@ _Last updated: 2026-02-04_
   - manual upload to NuGet.
 - Moved all `AWSS3FileSystem*.resx` localization resources to `Resources/`.
 - Added explicit `.csproj` resource mappings to preserve manifest names used by runtime localization lookup.
-
-## 2.1.0 - 2026-02-02
-
 - Added comprehensive project documentation:
   - `README.md` (expanded usage and configuration guide)
   - `docs/API_REFERENCE.md` (JSDoc-style API reference)
@@ -35,17 +30,11 @@ _Last updated: 2026-02-04_
   - enabled XML documentation file generation
 - Updated Umbraco Marketplace description and title to reflect current capabilities.
 - Clarified in technical/project documentation that for ease of management, the S3 `cache` folder replicates the `media` folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.
-
-## 2.0.0
-
-- This package is a full porting and refactor of `Our.Umbraco.StorageProviders.AWSS3` for Umbraco 17 and .NET 10.
 - Project migration to Umbraco 17 / .NET 10.
 - S3 media provider integration and middleware alignment.
 - ImageSharp provider/cache integration updates.
-
-## 1.x
-
 - Legacy implementation lineage and earlier package versions.
+- This package is a full porting and refactor of `Our.Umbraco.StorageProviders.AWSS3`.
 
 ---
 Current documentation: see also `docs/DEVELOPMENT.md` and `docs/PROJECT_STRUCTURE.md`.
