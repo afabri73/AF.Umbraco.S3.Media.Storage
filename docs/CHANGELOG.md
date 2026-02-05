@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.0 - 2026-02-05
+
+- Added multi-target support: `net9.0` and `net10.0`.
+- Updated package version to align with cross-version Umbraco support (15/16/17).
+- Added security advisory note in docs: users should run patched Umbraco versions for known platform advisories.
+- Added dedicated Umbraco test hosts: `Umbraco.Cms.15.x` and `Umbraco.Cms.16.x`, aligned with local config overrides (`appsettings.Local.json`).
+- Added CI smoke matrix workflow for host validation (build + boot + media upload) across Umbraco 15/16/17 hosts.
+- Updated host package references to latest validated patch lines:
+  - Umbraco 15 host: `Umbraco.Cms` `15.4.4`
+  - Umbraco 16 host: `Umbraco.Cms` `16.4.1`
+- Fixed smoke endpoint service resolution and validated smoke endpoints on `.NET 9` for Umbraco 15 and 16 (`/smoke/health`, `/smoke/media-upload` => `exists:true`).
+- Completed log validation with `[AFUS3MS]` filter on test hosts without package-level `Error/Fatal` events during startup/upload/cache/delete checks.
+
 ## [1.0.0] - 2026-02-05
 - Aligned release metadata and documentation with the current package naming.
 - Added startup S3 connectivity validation that blocks Umbraco boot on AWS connection failures.

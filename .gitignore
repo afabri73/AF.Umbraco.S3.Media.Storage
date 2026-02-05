@@ -68,11 +68,31 @@ src/Umbraco.Cms.17.x/umbraco/Logs/
 src/Umbraco.Cms.17.x/wwwroot/media/
 src/Umbraco.Cms.17.x/wwwroot/cache/
 src/Umbraco.Cms.17.x/wwwroot/umbraco/
+src/Umbraco.Cms.16.x/umbraco/Data/
+src/Umbraco.Cms.16.x/umbraco/Logs/
+src/Umbraco.Cms.16.x/wwwroot/media/
+src/Umbraco.Cms.16.x/wwwroot/cache/
+src/Umbraco.Cms.16.x/wwwroot/umbraco/
+src/Umbraco.Cms.15.x/umbraco/Data/
+src/Umbraco.Cms.15.x/umbraco/Logs/
+src/Umbraco.Cms.15.x/wwwroot/media/
+src/Umbraco.Cms.15.x/wwwroot/cache/
+src/Umbraco.Cms.15.x/wwwroot/umbraco/
+src/Umbraco.Cms.15.x/appsettings-schema.json
+src/Umbraco.Cms.15.x/appsettings-schema.Umbraco.Cms.json
+src/Umbraco.Cms.15.x/umbraco-package-schema.json
+src/Umbraco.Cms.16.x/appsettings-schema.json
+src/Umbraco.Cms.16.x/appsettings-schema.Umbraco.Cms.json
+src/Umbraco.Cms.16.x/umbraco-package-schema.json
 
 # Local-only config variants
 appsettings.Local.json
 src/Umbraco.Cms.17.x/appsettings.Local.json
+src/Umbraco.Cms.16.x/appsettings.Local.json
+src/Umbraco.Cms.15.x/appsettings.Local.json
 appsettings.*.local.json
 src/Umbraco.Cms.17.x/appsettings.*.local.json
+src/Umbraco.Cms.16.x/appsettings.*.local.json
+src/Umbraco.Cms.15.x/appsettings.*.local.json
 *.log
 *.binlog

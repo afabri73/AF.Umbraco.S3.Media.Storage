@@ -1,6 +1,6 @@
 # AF.Umbraco.S3.Media.Storage
 
-AWS S3 media storage provider for Umbraco 17 on .NET 10.
+AWS S3 media storage provider for Umbraco 15/16/17 on .NET 9/10.
 
 This package replaces the default media file system with an S3-backed implementation and includes:
 
@@ -17,15 +17,21 @@ This package replaces the default media file system with an S3-backed implementa
 
 This project is a porting of `Our.Umbraco.StorageProviders.AWSS3`  
 ([adam-werner/Our.Umbraco.StorageProviders.AWSS3](https://github.com/adam-werner/Our.Umbraco.StorageProviders.AWSS3)),
-which is not compatible with Umbraco 17.
+which is not compatible with recent Umbraco versions.
 
-`AF.Umbraco.S3.Media.Storage` was fully refactored to be compatible with .NET 10 and Umbraco 17, and then further optimized and extended.
+`AF.Umbraco.S3.Media.Storage` was fully refactored to be compatible with modern Umbraco versions and then further optimized and extended.
 
 ## Compatibility
 
-- Umbraco CMS: `17.x`
-- .NET: `10.0`
+- Umbraco CMS: `15.x`, `16.x`, `17.x`
+- .NET: `9.0`, `10.0`
 - AWS SDK for .NET: `AWSSDK.S3` + `AWSSDK.Extensions.NETCore.Setup`
+
+## Test hosts and smoke CI
+
+- Local compatibility hosts are included under `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, and `src/Umbraco.Cms.17.x`.
+- Each host supports local overrides through `appsettings.Local.json`.
+- CI smoke workflow (`.github/workflows/host-smoke-matrix.yml`) validates build + boot + S3 media upload against all host projects.
 
 ## Installation
 
@@ -205,6 +211,11 @@ For full technical documentation:
 ## Security checks
 
 This repository runs automated secret scanning in GitHub Actions via Gitleaks (`.github/workflows/secret-scan.yml`).
+
+## Security advisory notice
+
+This package does not introduce the known Umbraco advisory `GHSA-69cg-w8vm-h229`, but it can be installed on Umbraco versions that may still include it.  
+For production usage, always install the latest patched Umbraco release in your major/minor line.
 
 ## Attribution request (non-binding)
 

@@ -1,14 +1,26 @@
 # Development Guide
-_Last updated: 2026-02-04_
+_Last updated: 2026-02-05_
 
 ## Scope
 This guide documents the package project `src/AF.Umbraco.S3.Media.Storage`.
-The `src/Umbraco.Cms.17.x` project is a test host only.
+Test hosts are available under:
+- `src/Umbraco.Cms.15.x`
+- `src/Umbraco.Cms.16.x`
+- `src/Umbraco.Cms.17.x`
 
 ## Local build
 ```bash
 dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
 ```
+
+## Host validation quick checks
+- Run host smoke endpoints with `AF_SMOKE_TESTS=1` to validate boot and media upload path.
+- Smoke endpoints:
+  - `GET /smoke/health`
+  - `POST /smoke/media-upload`
+- Verified combinations:
+  - Umbraco 15 on `.NET 9`
+  - Umbraco 16 on `.NET 9`
 
 ## Caching behavior
 - Images are mirrored into cache using the original image stream.

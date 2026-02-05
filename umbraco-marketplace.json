@@ -7,7 +7,7 @@
       "ImageUrl": "https://avatars.githubusercontent.com/u/6714121?s=400&u=154a98a8bd78a87af042628f2c6b0ef1e8a9d0ea&v=4"
     },
     "Category": "Developer Tools",
-    "Description": "AWS S3 media storage provider for Umbraco 17 (.NET 10). Based on original Our.Umbraco.StorageProviders.AWSS3 project (not compatible with Umbraco 17), the new project is fully refactored, optimized and extended for .NET 10 and Umbraco 17. Includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.",
+    "Description": "AWS S3 media storage provider for Umbraco 15/16/17 (.NET 9/10). Based on original Our.Umbraco.StorageProviders.AWSS3 project (not compatible with recent Umbraco versions), the new project is fully refactored, optimized and extended for modern Umbraco versions. Includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder. Security note: this package does not introduce known Umbraco platform advisories; users should run patched Umbraco releases.",
     "DocumentationUrl": "https://github.com/afabri73/AF.Umbraco.S3.Media.Storage?tab=readme-ov-file#readme-ov-file",
     "LicenseTypes": [ "Free" ],
     "LicensesUrl": "https://github.com/afabri73/AF.Umbraco.S3.Media.Storage?tab=readme-ov-file#MIT-1-ov-file",
@@ -20,24 +20,24 @@
         "Caption": "Umbraco backoffice media section with uploaded images stored in S3 bucket"
       },
       {
-        "ImageUrl": "https://raw.githubusercontent.com/afabri73/AF.Umbraco.S3.Media.Storage/main/assets/MinIO-S3-Root.png",
-        "Caption": "MinIO S3 bucket - Root folder"
-      },
-      {
-        "ImageUrl": "https://raw.githubusercontent.com/afabri73/AF.Umbraco.S3.Media.Storage/main/assets/MinIO-S3-Media.png",
-        "Caption": "MinIO S3 bucket - Media folder with uploaded images"
-      },
-      {
-        "ImageUrl": "https://raw.githubusercontent.com/afabri73/AF.Umbraco.S3.Media.Storage/main/assets/MinIO-S3-Cache.png",
-        "Caption": "MinIO S3 bucket - Cache folder with cached images"
-      },
-      {
         "ImageUrl": "https://raw.githubusercontent.com/afabri73/AF.Umbraco.S3.Media.Storage/main/assets/Umbraco-Media-Details.png",
         "Caption": "Umbraco backoffice media section - image details view"
       },
       {
         "ImageUrl": "https://raw.githubusercontent.com/afabri73/AF.Umbraco.S3.Media.Storage/main/assets/MinIO-S3-Uploaded-Image.png",
         "Caption": "MinIO S3 bucket - Uploaded image view"
+      },
+      {
+        "ImageUrl": "https://raw.githubusercontent.com/afabri73/AF.Umbraco.S3.Media.Storage/main/assets/MinIO-S3-Cache.png",
+        "Caption": "MinIO S3 bucket - Cache folder with cached images"
+      },
+      {
+        "ImageUrl": "https://raw.githubusercontent.com/afabri73/AF.Umbraco.S3.Media.Storage/main/assets/MinIO-S3-Root.png",
+        "Caption": "MinIO S3 bucket - Root folder"
+      },
+      {
+        "ImageUrl": "https://raw.githubusercontent.com/afabri73/AF.Umbraco.S3.Media.Storage/main/assets/MinIO-S3-Media.png",
+        "Caption": "MinIO S3 bucket - Media folder with uploaded images"
       }
     ],
     "Tags": [
@@ -47,7 +47,10 @@
       "FileSystemProvider",
       "Images",
       "Storage",
+      "Umbraco 15",
+      "Umbraco 16",
       "Umbraco 17",
+      ".NET 9",
       ".NET 10"
     ],
     "Title": "AF Umbraco S3 Media Storage"

@@ -1,24 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;1573;1574</NoWarn>
     <Title>AF Umbraco S3 Media Storage</Title>
     <Authors>Adriano Fabri</Authors>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Copyright>©2026 Adriano Fabri</Copyright>
-    <Description>AWS S3 media storage provider for Umbraco 17 (.NET 10). Based on original Our.Umbraco.StorageProviders.AWSS3 project (not compatible with Umbraco 17), the new project is fully refactored, optimized and extended for .NET 10 and Umbraco 17. Includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.</Description>
+    <Description>AWS S3 media storage provider for Umbraco 15/16/17 (.NET 9/10). Based on original Our.Umbraco.StorageProviders.AWSS3 project (not compatible with recent Umbraco versions), the new project is fully refactored, optimized and extended for modern Umbraco versions. Includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder. Security note: this package does not introduce known Umbraco platform advisories; users should run patched Umbraco releases.</Description>
     <PackageId>AF.Umbraco.S3.Media.Storage</PackageId>
-    <PackageTags>umbraco;aws;s3;umbraco17;umbraco-marketplace</PackageTags>
+    <PackageTags>umbraco;aws;s3;media;filesystemprovider;images;storage;umbraco15;umbraco16;umbraco17;dotnet9;dotnet10;umbraco-marketplace</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/afabri73/AF.Umbraco.S3.Media.Storage</PackageProjectUrl>
     <RepositoryUrl>https://github.com/afabri73/AF.Umbraco.S3.Media.Storage</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>1.0.0: Initial release of the AF Umbraco S3 Media Storage package, providing a production-ready AWS S3 media storage provider for Umbraco 17 (.NET 10) with media delivery middleware, ImageSharp integration, localized upload validation, and configurable cache retention cleanup.</PackageReleaseNotes>
+    <PackageReleaseNotes>1.1.0: Added multi-target support for .NET 9 and .NET 10, with compatibility across Umbraco 15/16/17. Updated package metadata/documentation and added a security advisory note recommending patched Umbraco releases.</PackageReleaseNotes>
     <PackageIconUrl />
     <PackageIcon>Logo.jpg</PackageIcon>
+    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+    <PackageVersion>1.1.0</PackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\brand\Logo.jpg" Pack="true" PackagePath="\" Link="Logo.jpg">
@@ -31,7 +33,7 @@
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.22" />
     <PackageReference Include="AWSSDK.S3" Version="4.0.18.1" />
     <PackageReference Include="SixLabors.ImageSharp.Web.Providers.AWS" Version="3.2.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Common" Version="17.1.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="[15.0.0,18.0.0)" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources/AWSS3FileSystem.resx" ManifestResourceName="AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem" />

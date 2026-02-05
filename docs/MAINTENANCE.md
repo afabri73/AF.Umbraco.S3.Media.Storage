@@ -1,9 +1,9 @@
 # Maintenance Guide
-_Last updated: 2026-02-04_
+_Last updated: 2026-02-05_
 
 ## Routine checks
 - Build the package and verify there are no warnings/errors.
-- Validate media upload/read in the test host project.
+- Validate media upload/read in all test hosts (`Umbraco.Cms.15.x`, `Umbraco.Cms.16.x`, `Umbraco.Cms.17.x`).
 - Confirm S3 bucket access and object lifecycle rules.
 - Confirm XML documentation is present for classes, methods, and properties.
 - Confirm all XML comments and technical documentation remain in English.
@@ -12,7 +12,11 @@ _Last updated: 2026-02-04_
 1. Build package.
 2. Validate image upload and cache behavior.
 3. Verify non-image upload works without cache errors.
-4. Update documentation date and release notes.
+4. Run smoke endpoint checks on compatibility hosts:
+   - `GET /smoke/health`
+   - `POST /smoke/media-upload`
+5. Verify `[AFUS3MS]` logs have no package-level `Error/Fatal` events during startup/upload/cache/delete checks.
+6. Update documentation date and release notes.
 
 <!-- DOCSYNC:START -->
 ## Implementation Notes (Code-Aligned)

@@ -1,6 +1,6 @@
 # Architecture
 
-_Last updated: 2026-02-04_
+_Last updated: 2026-02-05_
 
 ## Overview
 
@@ -12,6 +12,12 @@ Core goals:
 - Serve `/media/*` directly from S3.
 - Cache only supported image files in S3 and cache transformed images for ImageSharp requests.
 - Keep upload validation and error reporting user-friendly and localized.
+
+Compatibility validation hosts:
+
+- `src/Umbraco.Cms.15.x` (`net9.0`, `net10.0`)
+- `src/Umbraco.Cms.16.x` (`net9.0`, `net10.0`)
+- `src/Umbraco.Cms.17.x` (`net10.0`)
 
 ## High-level flow
 
