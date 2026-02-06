@@ -1,0 +1,6 @@
+<Project>
+  <!-- Inject package project reference into host projects without modifying shared host csproj files -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'Umbraco.Cms.15.x' or '$(MSBuildProjectName)' == 'Umbraco.Cms.16.x' or '$(MSBuildProjectName)' == 'Umbraco.Cms.17.x'">
+    <ProjectReference Include="..\AF.Umbraco.S3.Media.Storage\AF.Umbraco.S3.Media.Storage.csproj" />
+  </ItemGroup>
+</Project>
