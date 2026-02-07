@@ -1,5 +1,8 @@
 <Project>
-  <!-- Inject package project reference into host projects without modifying shared host csproj files -->
+  <!--
+    This file injects the package ProjectReference into host projects at build time.
+    The reference will NOT appear in individual host .csproj files because it is applied via MSBuild.
+  -->
   <ItemGroup Condition="'$(MSBuildProjectName)' == 'Umbraco.Cms.15.x' or '$(MSBuildProjectName)' == 'Umbraco.Cms.16.x' or '$(MSBuildProjectName)' == 'Umbraco.Cms.17.x'">
     <ProjectReference Include="..\AF.Umbraco.S3.Media.Storage\AF.Umbraco.S3.Media.Storage.csproj" />
   </ItemGroup>
