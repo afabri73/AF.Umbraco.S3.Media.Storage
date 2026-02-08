@@ -11,7 +11,6 @@
 - Updated package version to align with cross-version Umbraco support (15/16/17).
 - Added security advisory note in docs: users should run patched Umbraco versions for known platform advisories.
 - Added dedicated Umbraco test hosts: `Umbraco.Cms.15.x` and `Umbraco.Cms.16.x`, aligned with local config overrides (`appsettings.Local.json`).
-- Added CI smoke matrix workflow for host validation (build + boot + media upload) across Umbraco 15/16/17 hosts.
 - Updated host package references to latest validated patch lines:
   - Umbraco 15 host: `Umbraco.Cms` `15.4.4`
   - Umbraco 16 host: `Umbraco.Cms` `16.4.1`

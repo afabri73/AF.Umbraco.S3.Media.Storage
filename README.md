@@ -31,7 +31,6 @@ which is not compatible with recent Umbraco versions.
 
 - Local compatibility hosts are included under `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, and `src/Umbraco.Cms.17.x`.
 - Each host supports local overrides through `appsettings.Local.json`.
-- CI smoke workflow (`.github/workflows/host-smoke-matrix.yml`) validates build + boot + S3 media upload against all host projects.
 
 ## Installation
 
