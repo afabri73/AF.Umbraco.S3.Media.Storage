@@ -47,17 +47,6 @@ jobs:
             dotnet: 10.0.x
             port: 5217
             bucket_suffix: net10
-
-    services:
-      minio:
-        image: minio/minio:RELEASE.2025-01-20T14-49-07Z
-        env:
-          MINIO_ROOT_USER: minioadmin
-          MINIO_ROOT_PASSWORD: minioadmin
-        ports:
-          - 9000:9000
-        command: server /data --console-address ":9001"
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,6 +55,14 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ matrix.dotnet }}
+
+      - name: Start MinIO
+        run: |
+          docker run -d --name minio \
+            -e MINIO_ROOT_USER=minioadmin \
+            -e MINIO_ROOT_PASSWORD=minioadmin \
+            -p 9000:9000 -p 9001:9001 \
+            minio/minio:RELEASE.2025-01-20T14-49-07Z server /data --console-address ":9001"
 
       - name: Wait for MinIO
         run: |
