@@ -1,7 +1,5 @@
 # Architecture
 
-_Last updated: 2026-02-05_
-
 ## Overview
 
 `AF.Umbraco.S3.Media.Storage` replaces Umbraco Media filesystem operations with an AWS S3-backed implementation and integrates ImageSharp with an S3 cache layer.
@@ -21,10 +19,10 @@ Compatibility validation hosts:
 
 ## High-level flow
 
-1. Umbraco bootstraps and `AddAWSS3MediaFileSystem()` registers services (required activation step).
-2. `AWSS3Composer` configures AWS services and validation middleware.
+1. Umbraco bootstraps and `AWSS3Composer` registers services automatically.
+2. `AddAWSS3MediaFileSystem()` is invoked by the composer (no `Program.cs` changes required).
 3. `AWSS3StartupConnectivityHostedService` validates S3 connectivity and blocks boot on failure.
-4. `UseAWSS3MediaFileSystem()` adds S3 media-serving middleware (required activation step).
+4. `UseAWSS3MediaFileSystem()` is applied by the composer via pipeline filters.
 5. Media write/read operations flow through `AWSS3FileSystem`.
 6. ImageSharp requests (`?width=...`) use:
    - `AWSS3FileSystemImageProvider` for source resolution.
@@ -48,6 +46,7 @@ Responsibilities:
 - Validate S3 connectivity at startup and stop application boot on failure.
 - Register filesystem, middleware, image provider, and image cache.
 - Replace Umbraco media filesystem with S3-backed implementation.
+- Keep hosts neutral (no manual `Program.cs` registration required).
 
 ### I/O layer
 

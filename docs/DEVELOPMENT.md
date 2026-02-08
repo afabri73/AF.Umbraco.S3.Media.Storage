@@ -1,5 +1,4 @@
 # Development Guide
-_Last updated: 2026-02-05_
 
 ## Scope
 This guide documents the package project `src/AF.Umbraco.S3.Media.Storage`.
@@ -14,6 +13,7 @@ dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
 ```
 
 ## Host validation quick checks
+- Hosts do not require `Program.cs` changes; the package composer wires everything automatically.
 - Run host smoke endpoints with `AF_SMOKE_TESTS=1` to validate boot and media upload path.
 - Smoke endpoints:
   - `GET /smoke/health`

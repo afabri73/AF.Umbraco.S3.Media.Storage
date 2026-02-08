@@ -43,40 +43,10 @@ dotnet add package AF.Umbraco.S3.Media.Storage
 
 ## Basic setup
 
-### 1) Register services in `Program.cs`
+### 1) No `Program.cs` changes required
 
-```csharp
-using AF.Umbraco.S3.Media.Storage.DependencyInjection;
-
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
-
-builder.CreateUmbracoBuilder()
-    .AddBackOffice()
-    .AddWebsite()
-    .AddComposers()
-    .AddAWSS3MediaFileSystem() // Required: registers the S3 media filesystem services.
-    .Build();
-
-WebApplication app = builder.Build();
-
-await app.BootUmbracoAsync();
-
-app.UseUmbraco()
-    .WithMiddleware(u =>
-    {
-        u.UseBackOffice();
-        u.UseWebsite();
-        u.UseAWSS3MediaFileSystem(); // Required: enables S3 media serving middleware in the pipeline.
-    })
-    .WithEndpoints(u =>
-    {
-        u.UseBackOfficeEndpoints();
-        u.UseWebsiteEndpoints();
-    });
-
-await app.RunAsync();
-```
+The package wires services and middleware automatically via a composer.
+You only need to configure `appsettings*.json`.
 
 ### 2) Configure `appsettings*.json`
 

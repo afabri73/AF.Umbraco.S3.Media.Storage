@@ -1,5 +1,7 @@
 ﻿using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
+using AF.Umbraco.S3.Media.Storage.Extensions;
+using AF.Umbraco.S3.Media.Storage.Middlewares;
 using Amazon.S3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +25,8 @@ namespace AF.Umbraco.S3.Media.Storage.Composers
         /// <param name="builder">The Umbraco builder.</param>
         public void Compose(IUmbracoBuilder builder)
         {
+            builder.AddAWSS3MediaFileSystem();
+
             AWSOptions awsOptions = builder.Config.GetAWSOptions();
             string accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
             string secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
@@ -39,11 +43,29 @@ namespace AF.Umbraco.S3.Media.Storage.Composers
             builder.Services.AddAWSService<IAmazonS3>();
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.TryAddTransient<AWSS3UploadValidationExceptionMiddleware>();
+
+            if (Environment.GetEnvironmentVariable("AF_SMOKE_TESTS") == "1")
+            {
+                builder.Services.TryAddTransient<AWSS3SmokeTestsMiddleware>();
+            }
             builder.Services.AddHostedService<AWSS3StartupConnectivityHostedService>();
             builder.Services.Configure<UmbracoPipelineOptions>(options =>
+            {
+                options.AddFilter(new UmbracoPipelineFilter(
+                    "AWSS3MediaFileSystem",
+                    prePipeline: app => app.UseAWSS3MediaFileSystem()));
+
+                if (Environment.GetEnvironmentVariable("AF_SMOKE_TESTS") == "1")
+                {
+                    options.AddFilter(new UmbracoPipelineFilter(
+                        "AWSS3SmokeTests",
+                        prePipeline: app => app.UseMiddleware<AWSS3SmokeTestsMiddleware>()));
+                }
+
                 options.AddFilter(new UmbracoPipelineFilter(
                     "AWSS3UploadValidation",
-                    prePipeline: app => app.UseMiddleware<AWSS3UploadValidationExceptionMiddleware>())));
+                    prePipeline: app => app.UseMiddleware<AWSS3UploadValidationExceptionMiddleware>()));
+            });
         }
     }
 }

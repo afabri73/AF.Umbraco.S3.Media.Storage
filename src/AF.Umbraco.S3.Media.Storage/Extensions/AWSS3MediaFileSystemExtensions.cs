@@ -8,7 +8,6 @@ using System;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Infrastructure.DependencyInjection;
 using Umbraco.Cms.Web.Common.ApplicationBuilder;
-using Umbraco.Extensions;
 
 namespace AF.Umbraco.S3.Media.Storage.Extensions
 {
@@ -41,7 +40,7 @@ namespace AF.Umbraco.S3.Media.Storage.Extensions
 
             // ImageSharp image provider/cache
             builder.Services.Insert(0, ServiceDescriptor.Singleton<IImageProvider, AWSS3FileSystemImageProvider>());
-            builder.Services.AddUnique<IImageCache, AWSS3FileSystemImageCache>();
+            builder.Services.TryAddSingleton<IImageCache, AWSS3FileSystemImageCache>();
             builder.Services.Replace(ServiceDescriptor.Singleton<ICacheHash, AWSS3ScopedCacheHash>());
 
             builder.SetMediaFileSystem(provider => provider.GetRequiredService<IAWSS3FileSystemProvider>()

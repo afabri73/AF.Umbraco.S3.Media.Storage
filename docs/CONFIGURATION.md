@@ -1,8 +1,7 @@
 # Configuration Reference
-_Last updated: 2026-02-04_
 
 ## Required settings
-Configure the S3 provider settings used by the package in your Umbraco host configuration.
+Configure the S3 provider settings used by the package in your Umbraco host configuration. No `Program.cs` changes are required.
 
 Typical configuration areas:
 - AWS access key / secret key

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+- Removed Program.cs requirements by moving registration to the package composer.
+- Added package-hosted smoke endpoints (opt-in via AF_SMOKE_TESTS=1).
+- Updated docs/metadata to reflect automatic composition.
+
 ## 1.1.0 - 2026-02-05
 
 - Added multi-target support: `net9.0` and `net10.0`.
