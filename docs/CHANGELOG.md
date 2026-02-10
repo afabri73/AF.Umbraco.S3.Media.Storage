@@ -1,6 +1,10 @@
 # Changelog
 
-## 1.2.0
+## 1.2.1 - 2026-02-10
+- Rebuilt package to include composer auto-registration and smoke endpoints in the shipped DLLs.
+- Documentation and marketplace metadata updated to reflect the changes.
+
+## 1.2.0 - 2026-02-08
 - Removed Program.cs requirements by moving registration to the package composer.
 - Added package-hosted smoke endpoints (opt-in via AF_SMOKE_TESTS=1).
 - Updated docs/metadata to reflect automatic composition.

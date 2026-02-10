@@ -6,9 +6,9 @@
     <NoWarn>$(NoWarn);1591;1573;1574</NoWarn>
     <Title>AF Umbraco S3 Media Storage</Title>
     <Authors>Adriano Fabri</Authors>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Copyright>©2026 Adriano Fabri</Copyright>
-    <Description>AWS S3 media storage provider for Umbraco 15/16/17 (.NET 9/10). Based on original Our.Umbraco.StorageProviders.AWSS3 project (not compatible with recent Umbraco versions), the new project is fully refactored, optimized and extended for modern Umbraco versions. Includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. No Program.cs changes required (auto-composed). For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder. Security note: this package does not introduce known Umbraco platform advisories; users should run patched Umbraco releases.</Description>
+    <Description>AWS S3 media storage provider for Umbraco 15/16/17 (.NET 9/10). Based on original Our.Umbraco.StorageProviders.AWSS3 project (not compatible with recent Umbraco versions), the new project is fully refactored, optimized and extended for modern Umbraco versions. Includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. No Program.cs changes required (auto-composed). Optional package-hosted smoke endpoints are available when AF_SMOKE_TESTS=1. For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder. Security note: this package does not introduce known Umbraco platform advisories; users should run patched Umbraco releases.</Description>
     <PackageId>AF.Umbraco.S3.Media.Storage</PackageId>
     <PackageTags>umbraco;aws;s3;media;filesystemprovider;images;storage;umbraco15;umbraco16;umbraco17;dotnet9;dotnet10;umbraco-marketplace</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -16,11 +16,11 @@
     <RepositoryUrl>https://github.com/afabri73/AF.Umbraco.S3.Media.Storage</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>1.2.0: Removed Program.cs requirements by moving registration to the package composer. Added package-hosted smoke endpoints (opt-in via AF_SMOKE_TESTS=1).</PackageReleaseNotes>
+    <PackageReleaseNotes>1.2.1: Rebuilt package to include composer auto-registration and smoke endpoints in the shipped DLLs.</PackageReleaseNotes>
     <PackageIconUrl />
     <PackageIcon>Logo.jpg</PackageIcon>
     <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
-    <PackageVersion>1.2.0</PackageVersion>
+    <PackageVersion>1.2.1</PackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\brand\Logo.jpg" Pack="true" PackagePath="\" Link="Logo.jpg">

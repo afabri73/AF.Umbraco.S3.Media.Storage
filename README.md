@@ -10,6 +10,7 @@ This package replaces the default media file system with an S3-backed implementa
 - S3 cache for all media files (`cache/` mirror) plus ImageSharp transformed images.
 - Localized server-side validation for malformed image uploads.
 - Startup S3 connectivity check that blocks app boot on connection failure.
+- Optional package-hosted smoke endpoints (opt-in via `AF_SMOKE_TESTS=1`).
 - Optional cache-retention cleanup with normal and test modes.
 - Cache folder structure that mirrors the media folder structure.
 
@@ -140,6 +141,21 @@ Rules:
 
 - When Umbraco start, the package check AWS connectivity
 - If AWS connectivity is invalid, startup may be blocked by the package startup validation.
+
+## Smoke endpoints (opt-in)
+
+For local validation and CI checks you can enable built-in smoke endpoints by setting:
+
+```bash
+AF_SMOKE_TESTS=1
+```
+
+Endpoints:
+
+- `GET /smoke/health`
+- `POST /smoke/media-upload`
+
+These endpoints are disabled by default.
 
 ## Logging and alerts
 

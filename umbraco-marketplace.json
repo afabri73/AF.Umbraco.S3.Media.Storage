@@ -7,7 +7,7 @@
       "ImageUrl": "https://avatars.githubusercontent.com/u/6714121?s=400&u=154a98a8bd78a87af042628f2c6b0ef1e8a9d0ea&v=4"
     },
     "Category": "Developer Tools",
-    "Description": "AWS S3 media storage provider for Umbraco 15/16/17 (.NET 9/10). This project includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. No Program.cs changes required (auto-composed). For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder. Security note: this package does not introduce known Umbraco platform advisories; users should run patched Umbraco releases.",
+    "Description": "AWS S3 media storage provider for Umbraco 15/16/17 (.NET 9/10). This project includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation and configurable cache-retention cleanup. No Program.cs changes required (auto-composed). Optional package-hosted smoke endpoints are available when AF_SMOKE_TESTS=1. For ease management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder. Security note: this package does not introduce known Umbraco platform advisories; users should run patched Umbraco releases.",
     "DocumentationUrl": "https://github.com/afabri73/AF.Umbraco.S3.Media.Storage?tab=readme-ov-file#readme-ov-file",
     "LicenseTypes": [ "Free" ],
     "LicensesUrl": "https://github.com/afabri73/AF.Umbraco.S3.Media.Storage?tab=readme-ov-file#MIT-1-ov-file",
