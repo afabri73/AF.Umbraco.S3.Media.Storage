@@ -5,24 +5,17 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Umbraco.Cms._16.x</RootNamespace>
     <CompressionEnabled>false</CompressionEnabled>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="16.4.1" />
-    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
-  </ItemGroup>
-
-  <PropertyGroup>
     <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
     <RazorCompileOnBuild>false</RazorCompileOnBuild>
     <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Umbraco.Cms" Version="16.5.0" />
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
+    
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+    
     <Content Remove="wwwroot/umbraco/backoffice/packages/core/resources/index.js" />
   </ItemGroup>
 </Project>

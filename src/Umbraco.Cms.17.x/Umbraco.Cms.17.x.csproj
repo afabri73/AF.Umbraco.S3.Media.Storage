@@ -6,29 +6,18 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Umbraco.Cms._17.x</RootNamespace>
     <CompressionEnabled>false</CompressionEnabled>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="17.1.0" />
-    <PackageReference Include="Umbraco.Cms.DevelopmentMode.Backoffice" Version="17.1.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
-    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
-  </ItemGroup>
-  
-  <PropertyGroup>
     <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
-  </PropertyGroup>
-  
-  <PropertyGroup>
     <RazorCompileOnBuild>false</RazorCompileOnBuild>
     <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Avoid duplicate static asset route already provided by Umbraco.Cms.StaticAssets package -->
+    <PackageReference Include="Umbraco.Cms" Version="17.1.0" />
+    <PackageReference Include="Umbraco.Cms.DevelopmentMode.Backoffice" Version="17.1.0" />
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
+
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+
     <Content Remove="wwwroot/umbraco/backoffice/packages/core/resources/index.js" />
   </ItemGroup>
 </Project>
