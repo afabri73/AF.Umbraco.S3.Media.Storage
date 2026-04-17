@@ -318,7 +318,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         private void ValidateImageIfNeeded(string path, Stream stream)
         {
             var contentType = _mimeTypeResolver.Resolve(path);
-            if (!contentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+            if (!ImageSharpValidationFileTypes.RequiresValidation(path, contentType))
             {
                 return;
             }
