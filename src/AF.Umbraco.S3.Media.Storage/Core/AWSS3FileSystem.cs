@@ -94,6 +94,8 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// </summary>
         public bool CanAddPhysical => false;
 
+        private readonly string _bucketHostName;
+
         /// <summary>
         /// Creates a new instance of <see cref="AWSS3FileSystem" />.
         /// </summary>
@@ -124,6 +126,8 @@ namespace AF.Umbraco.S3.Media.Storage.Core
 
             _mimeTypeResolver = mimeTypeResolver;
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+
+            _bucketHostName = options.BucketHostName?.TrimEnd('/') ?? string.Empty;
 
             _S3Client = s3Client;
         }
@@ -603,15 +607,14 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Gets url.
+        /// Gets the public URL for the specified path, prepending the configured
+        /// CDN hostname if available.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns>The full public URL for the media file.</returns>
         public string GetUrl(string path)
         {
-            var hostName = "";
-
-            return string.Concat(hostName, "/", ResolveBucketPath(path));
+            return string.Concat(_bucketHostName, "/", ResolveBucketPath(path));
         }
 
         /// <summary>
