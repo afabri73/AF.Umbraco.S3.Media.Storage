@@ -34,7 +34,8 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
         /// </summary>
         private string _rootPath;
         /// <summary>
-        /// Gets the container root path used by this component.
+        /// The S3 key prefix used as the root container path for media delivery.
+        /// Defaults to the virtual path if no bucket prefix is configured.
         /// </summary>
         private string _containerRootPath;
         /// <summary>
@@ -85,7 +86,7 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
 
             var fileSystemOptions = options.Get(name);
             _rootPath = hostingEnvironment.ToAbsolute(fileSystemOptions.VirtualPath);
-            _containerRootPath = AWSS3FileSystemOptions.BucketPrefix ?? _rootPath;
+            _containerRootPath = fileSystemOptions.BucketPrefix ?? _rootPath;
             _bucketName = fileSystemOptions.BucketName;
 
             _s3Client = s3Client;
@@ -429,14 +430,15 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
         }
 
         /// <summary>
-        /// Applies updated options when configuration changes are detected.
+        /// Applies updated options when configuration changes are detected,
+        /// refreshing the virtual path and container root path from the new options.
         /// </summary>
         private void OptionsOnChange(AWSS3FileSystemOptions options, string name, IHostingEnvironment hostingEnvironment)
         {
             if (name != _name) return;
 
             _rootPath = hostingEnvironment.ToAbsolute(options.VirtualPath);
-            _containerRootPath = options.VirtualPath ?? _rootPath;
+            _containerRootPath = options.BucketPrefix ?? _rootPath;
         }
     }
 }

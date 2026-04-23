@@ -1,3 +1,15 @@
+## Fork Notice
+
+This is a fork of [AF.Umbraco.S3.Media.Storage](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage) 
+by Adriano Fabri.
+
+**Changes in this fork:**
+- Made `BucketPrefix` configurable via `appsettings.json` (was previously hardcoded to `"media"`)
+
+A [pull request](link-to-your-pr) has been opened against the upstream repo. 
+If merged, this fork will be retired in favour of the official package.
+
+
 # AF.Umbraco.S3.Media.Storage
 
 AWS S3 media storage provider for Umbraco 15/16/17 on .NET 9/10.
