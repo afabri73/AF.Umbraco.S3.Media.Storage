@@ -12,7 +12,8 @@ namespace AF.Umbraco.S3.Media.Storage.Options
     {
         public const string MediaFileSystemName = "Media";
 
-        public const string BucketPrefix = "media";
+        //public const string BucketPrefix = "media";
+        public string BucketPrefix { get; set; } = "media";
 
         public string Region { get; set; } = null!;
 

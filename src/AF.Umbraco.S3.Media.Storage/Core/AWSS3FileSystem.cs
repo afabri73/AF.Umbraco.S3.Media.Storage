@@ -42,7 +42,8 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// </summary>
         private readonly string _rootUrl;
         /// <summary>
-        /// Gets the bucket prefix used by this component.
+        /// The S3 key prefix used as the root folder for media storage. 
+        /// Defaults to "media" if not overridden in configuration.
         /// </summary>
         private readonly string _bucketPrefix;
         /// <summary>
@@ -93,6 +94,8 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// </summary>
         public bool CanAddPhysical => false;
 
+        private readonly string _bucketHostName;
+
         /// <summary>
         /// Creates a new instance of <see cref="AWSS3FileSystem" />.
         /// </summary>
@@ -115,13 +118,16 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             _bucketName = options.BucketName ?? throw new ArgumentNullException(nameof(contentTypeProvider));
 
             _rootUrl = EnsureUrlSeparatorChar(hostingEnvironment.ToAbsolute(options.VirtualPath)).TrimEnd('/');
-            _bucketPrefix = AWSS3FileSystemOptions.BucketPrefix ?? _rootUrl;
+
+            _bucketPrefix = options.BucketPrefix ?? _rootUrl;
             _cannedACL = options.CannedACL;
             _serverSideEncryptionMethod = options.ServerSideEncryptionMethod;
             _rootPath = hostingEnvironment.ToAbsolute(options.VirtualPath);
 
             _mimeTypeResolver = mimeTypeResolver;
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+
+            _bucketHostName = options.BucketHostName?.TrimEnd('/') ?? string.Empty;
 
             _S3Client = s3Client;
         }
@@ -601,15 +607,14 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Gets url.
+        /// Gets the public URL for the specified path, prepending the configured
+        /// CDN hostname if available.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns>The full public URL for the media file.</returns>
         public string GetUrl(string path)
         {
-            var hostName = "";
-
-            return string.Concat(hostName, "/", ResolveBucketPath(path));
+            return string.Concat(_bucketHostName, "/", ResolveBucketPath(path));
         }
 
         /// <summary>
@@ -819,9 +824,12 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Builds mirrored Cache Key.
+        /// Builds the S3 cache key for a given source path by normalizing delimiters,
+        /// stripping the configured bucket prefix, and prepending the cache folder.
         /// </summary>
-        private static string BuildMirroredCacheKey(string sourcePath)
+        /// <param name="sourcePath">The full S3 source key.</param>
+        /// <returns>The corresponding cache key under the <c>cache/</c> prefix.</returns>
+        private string BuildMirroredCacheKey(string sourcePath)
         {
             string normalizedPath = sourcePath
                 .Trim()
@@ -889,12 +897,14 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Removes a leading <c>media/</c> segment from a normalized path when present.
+        /// Removes the leading bucket prefix segment from a normalized path when present.
         /// </summary>
         /// <param name="normalizedPath">The normalized source path.</param>
-        /// <returns>The path without the leading media segment.</returns>
-        private static string TrimLeadingMediaSegment(string normalizedPath) =>
-            normalizedPath.StartsWith("media/", StringComparison.Ordinal) ? normalizedPath["media/".Length..] : normalizedPath;
+        /// <returns>The path without the leading bucket prefix segment.</returns>
+        private string TrimLeadingMediaSegment(string normalizedPath) =>
+            normalizedPath.StartsWith(_bucketPrefix + "/", StringComparison.Ordinal)
+                ? normalizedPath[(_bucketPrefix.Length + 1)..]
+                : normalizedPath;
 
         /// <summary>
         /// Resolves bucket Path.
