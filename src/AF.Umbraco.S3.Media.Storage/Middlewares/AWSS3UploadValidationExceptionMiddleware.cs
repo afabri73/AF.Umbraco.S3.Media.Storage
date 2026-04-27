@@ -1,3 +1,4 @@
+using AF.Umbraco.S3.Media.Storage.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Localization;
@@ -98,7 +99,7 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
             IFormCollection form = await context.Request.ReadFormAsync(context.RequestAborted).ConfigureAwait(false);
             IFormFile invalidFile = null;
 
-            foreach (IFormFile file in form.Files.Where(IsImageCandidate))
+            foreach (IFormFile file in form.Files.Where(RequiresImageSharpValidation))
             {
                 await using Stream stream = file.OpenReadStream();
                 try
@@ -145,26 +146,11 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
         }
 
         /// <summary>
-        /// Determines whether image candidate.
+        /// Determines whether the file should be validated with ImageSharp.
         /// </summary>
-        private static bool IsImageCandidate(IFormFile file)
+        private static bool RequiresImageSharpValidation(IFormFile file)
         {
-            if (!string.IsNullOrWhiteSpace(file.ContentType) &&
-                file.ContentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            string extension = Path.GetExtension(file.FileName);
-            return extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase)
-                || extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase)
-                || extension.Equals(".png", StringComparison.OrdinalIgnoreCase)
-                || extension.Equals(".gif", StringComparison.OrdinalIgnoreCase)
-                || extension.Equals(".webp", StringComparison.OrdinalIgnoreCase)
-                || extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase)
-                || extension.Equals(".tif", StringComparison.OrdinalIgnoreCase)
-                || extension.Equals(".tiff", StringComparison.OrdinalIgnoreCase)
-                || extension.Equals(".qoi", StringComparison.OrdinalIgnoreCase);
+            return ImageSharpValidationFileTypes.RequiresValidation(file.FileName, file.ContentType);
         }
 
         /// <summary>
