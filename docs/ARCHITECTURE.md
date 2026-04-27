@@ -54,12 +54,14 @@ Responsibilities:
 - `IAWSS3FileSystemProvider`
 - `AWSS3FileSystemProvider`
 - `AWSS3FileSystem`
+- `ImageSharpValidationFileTypes`
 
 Responsibilities:
 
 - Resolve virtual paths into S3 object keys.
 - Upload/download/delete/list operations.
-- Validate image payload before write.
+- Validate supported raster image payloads before write.
+- Bypass ImageSharp validation for image formats that are not decoded by the bundled decoders, including SVG.
 - Cache maintenance on media delete (mirrored cache + transformed cache paths).
 
 ### HTTP middleware
@@ -70,7 +72,8 @@ Responsibilities:
 Responsibilities:
 
 - Serve media responses from S3 with range and conditional support.
-- Convert malformed-image upload failures into API-friendly localized `400` responses.
+- Convert malformed raster upload failures into API-friendly localized `400` responses.
+- Reuse the shared ImageSharp validation format rule so middleware and filesystem behavior stay consistent.
 
 ### Imaging layer
 

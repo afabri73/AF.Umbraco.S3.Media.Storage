@@ -5,6 +5,7 @@ This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 
 ## Rules
 - Package source code lives under `src/AF.Umbraco.S3.Media.Storage`.
+- Unit tests live under `src/AF.Umbraco.S3.Media.Storage.Tests`.
 - `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, and `src/Umbraco.Cms.17.x` are test hosts used for compatibility validation.
 - Folders are organized by technical responsibility.
 - XML documentation is expected across the package codebase (classes, methods, and properties).
@@ -24,6 +25,8 @@ This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 
 ## Key files
 - `src/AF.Umbraco.S3.Media.Storage/Core/AWSS3FileSystem.cs`: main S3 filesystem implementation and cache flow.
+- `src/AF.Umbraco.S3.Media.Storage/Core/ImageSharpValidationFileTypes.cs`: shared allow-list for formats that can be safely validated by ImageSharp.
+- `src/AF.Umbraco.S3.Media.Storage.Tests/ImageSharpValidationFileTypesTests.cs`: regression tests for SVG bypass and invalid PNG rejection.
 
 ## Localization resources
 - Localized resource files for `AWSS3FileSystem` are centralized in `src/AF.Umbraco.S3.Media.Storage/Resources`.
@@ -36,4 +39,5 @@ This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 - Package logs use the `[AFUS3MS]` prefix for quick filtering in Umbraco logs.
 - XML documentation is expected on classes, interfaces, methods, properties, and relevant fields to support long-term maintainability.
 - `/// <inheritdoc />` placeholders should be replaced with explicit summaries when maintainability documentation is required.
+- Shared validation rules must remain covered by unit tests when they affect both middleware and filesystem paths.
 <!-- DOCSYNC:END -->

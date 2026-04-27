@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+- Added xUnit regression tests for ImageSharp upload validation rules:
+  - SVG files are not passed to ImageSharp validation;
+  - invalid PNG content still requires ImageSharp validation and is rejected.
+- Added testing documentation and manuals for SVG/raster upload validation.
+
 ## 1.2.1 - 2026-02-10
 - Rebuilt package to include composer auto-registration and smoke endpoints in the shipped DLLs.
 - Documentation and marketplace metadata updated to reflect the changes.

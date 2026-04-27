@@ -4,9 +4,8 @@ using System.IO;
 
 namespace AF.Umbraco.S3.Media.Storage.Core
 {
-
     /// <summary>
-    /// Centralizes the file types that can be validated with the ImageSharp decoders bundled by this package.
+    /// Centralizes the formats that can be validated by the ImageSharp decoders bundled with the package.
     /// </summary>
     internal static class ImageSharpValidationFileTypes
     {
@@ -42,6 +41,15 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             "image/x-targa"
         };
 
+        /// <summary>
+        /// Determines whether a file should be validated with ImageSharp before it is stored.
+        /// </summary>
+        /// <param name="fileNameOrPath">File name or path used to resolve the extension.</param>
+        /// <param name="contentType">Declared or resolved content type for the file.</param>
+        /// <returns>
+        /// <see langword="true" /> when the format is handled by the bundled ImageSharp decoders;
+        /// otherwise <see langword="false" />, for example for SVG files.
+        /// </returns>
         public static bool RequiresValidation(string fileNameOrPath, string contentType)
         {
             string extension = Path.GetExtension(fileNameOrPath);

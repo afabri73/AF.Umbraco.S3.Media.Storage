@@ -33,6 +33,22 @@ which is not compatible with recent Umbraco versions.
 - Local compatibility hosts are included under `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, and `src/Umbraco.Cms.17.x`.
 - Each host supports local overrides through `appsettings.Local.json`.
 
+## Build and test
+
+Build the package:
+
+```bash
+dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj --no-restore
+```
+
+Run unit tests:
+
+```bash
+dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
+```
+
+The unit test suite includes a regression for SVG uploads being accepted and invalid PNG content still being rejected by ImageSharp validation.
+
 ## Installation
 
 Install from NuGet:
@@ -139,7 +155,7 @@ Rules:
 
 ## Setup validation
 
-- When Umbraco start, the package check AWS connectivity
+- When Umbraco starts, the package checks AWS connectivity.
 - If AWS connectivity is invalid, startup may be blocked by the package startup validation.
 
 ## Smoke endpoints (opt-in)
@@ -187,11 +203,17 @@ If a specific culture resource is missing, the package falls back to `en-US`.
 
 For full technical documentation:
 
+- `docs/README.md`
 - `docs/API_REFERENCE.md`
 - `docs/ARCHITECTURE.md`
 - `docs/CONFIGURATION.md`
+- `docs/DEVELOPMENT.md`
+- `docs/TESTING.md`
 - `docs/MAINTENANCE.md`
+- `docs/PROJECT_STRUCTURE.md`
 - `docs/CHANGELOG.md`
+- `docs/manuals/technical-manual.md`
+- `docs/manuals/user-manual.md`
 
 ## Security checks
 
@@ -212,4 +234,4 @@ If you fork or modify this project, please consider adding credits to:
 
 ## License
 
-This project is licensed under MIT. See `License.md`.
+This project is licensed under MIT. See `LICENSE`.

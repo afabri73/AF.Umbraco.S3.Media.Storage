@@ -12,6 +12,13 @@ Test hosts are available under:
 dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
 ```
 
+## Unit tests
+```bash
+dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
+```
+
+The unit test project covers shared package rules that do not require a full Umbraco host. The regression suite verifies that SVG uploads are not validated by ImageSharp, while invalid PNG content still requires ImageSharp validation and is rejected.
+
 ## Host validation quick checks
 - Hosts do not require `Program.cs` changes; the package composer wires everything automatically.
 - Run host smoke endpoints with `AF_SMOKE_TESTS=1` to validate boot and media upload path.
@@ -41,7 +48,7 @@ dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
 
 ## Documentation standards
 - XML comments are required for classes, interfaces, methods, functions, and properties across the package codebase.
-- XML comments and technical documentation must be written in English.
+- XML comments and technical documentation for new or updated areas must be written in English.
 - Prefer explicit XML comments over `<inheritdoc />` to keep implementation details self-contained for long-term maintenance.
 
 <!-- DOCSYNC:START -->
@@ -51,4 +58,5 @@ dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
 - Package logs use the `[AFUS3MS]` prefix for quick filtering in Umbraco logs.
 - XML documentation is expected on classes, interfaces, methods, properties, and relevant fields to support long-term maintainability.
 - `/// <inheritdoc />` placeholders should be replaced with explicit summaries when maintainability documentation is required.
+- ImageSharp validation is limited to formats supported by the bundled decoders; SVG media must bypass that validation path.
 <!-- DOCSYNC:END -->
