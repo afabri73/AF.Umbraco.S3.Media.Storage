@@ -96,3 +96,9 @@ src/Umbraco.Cms.16.x/appsettings.*.local.json
 src/Umbraco.Cms.15.x/appsettings.*.local.json
 *.log
 *.binlog
+artifacts/
+_artifacts/
+direttive
+_direttive/
+directives/
+_directives/
