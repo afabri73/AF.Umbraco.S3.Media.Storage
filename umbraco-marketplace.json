@@ -4,10 +4,20 @@
       "Name": "Adriano Fabri",
       "Description": "A full stack developer with a particular focus on .NET, Angular and NodeJS development.",
       "Url": "https://www.linkedin.com/in/fabriadriano/",
-      "ImageUrl": "https://avatars.githubusercontent.com/u/6714121?s=400&u=154a98a8bd78a87af042628f2c6b0ef1e8a9d0ea&v=4"
+      "ImageUrl": "https://avatars.githubusercontent.com/u/6714121?s=400&u=154a98a8bd78a87af042628f2c6b0ef1e8a9d0ea&v=4",
+      "Contributors": [
+        {
+          "Name": "koty10",
+          "Url": "https://github.com/koty10"
+        },
+        {
+          "Name": "proxicode",
+          "Url": "https://github.com/proxicode"
+        }
+      ]
     },
     "Category": "Developer Tools",
-    "Description": "AWS S3 media storage provider for Umbraco 15/16/17 (.NET 9/10). This project includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation, regression-tested SVG upload handling, invalid raster image rejection, configurable media/cache S3 prefixes, and configurable cache-retention cleanup. No Program.cs changes required (auto-composed). Optional package-hosted smoke endpoints are available when AF_SMOKE_TESTS=1. For ease of management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder. Thanks to contributors koty10 for the SVG upload-validation fix in PR #3 (https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3) and proxicode for the configurable bucket-prefix contribution and related integration fixes in PR #4 (https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/4). Security note: this package does not introduce known Umbraco platform advisories; users should run patched Umbraco releases.",
+    "Description": "AWS S3 media storage provider for Umbraco 15/16/17 (.NET 9/10). Current package version: 1.3.0. This project includes S3-backed IFileSystem integration, media delivery middleware, ImageSharp provider/cache, localized upload validation, regression-tested SVG upload handling, invalid raster image rejection, configurable media/cache S3 prefixes, and configurable cache-retention cleanup. No Program.cs changes required (auto-composed). Optional package-hosted smoke endpoints are available when AF_SMOKE_TESTS=1. For ease of management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder. Release 1.3.0 adds configurable MediaBucketPrefix and CacheBucketPrefix support, keeps local public media URLs on Umbraco's media path unless BucketHostName is configured, and normalizes configured prefixes. Thanks to contributors koty10 for the SVG upload-validation fix in PR #3 (https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3) and proxicode for the configurable bucket-prefix contribution and related integration fixes in PR #4 (https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/4). Security note: this package does not introduce known Umbraco platform advisories; users should run patched Umbraco releases.",
     "DocumentationUrl": "https://github.com/afabri73/AF.Umbraco.S3.Media.Storage?tab=readme-ov-file#readme-ov-file",
     "LicenseTypes": [ "Free" ],
     "LicensesUrl": "https://github.com/afabri73/AF.Umbraco.S3.Media.Storage?tab=readme-ov-file#MIT-1-ov-file",

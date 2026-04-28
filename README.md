@@ -29,9 +29,16 @@ Thanks to community contributors:
 
 ## Compatibility
 
+- Current package version: `1.3.0`
 - Umbraco CMS: `15.x`, `16.x`, `17.x`
 - .NET: `9.0`, `10.0`
 - AWS SDK for .NET: `AWSSDK.S3` + `AWSSDK.Extensions.NETCore.Setup`
+
+## Current Release
+
+`1.3.0` adds configurable S3 `MediaBucketPrefix` and `CacheBucketPrefix` support, keeps local public media URLs on Umbraco's media path unless `BucketHostName` is configured, normalizes configured prefixes, and adds regression tests/documentation for the new behavior.
+
+Thanks to [proxicode](https://github.com/proxicode) for the configurable bucket-prefix contribution and related integration fixes in [PR #4](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/4), and to [koty10](https://github.com/koty10) for the SVG upload-validation fix in [PR #3](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3).
 
 ## Test hosts and smoke CI
 

@@ -1,8 +1,15 @@
 # Changelog
 
 ## Unreleased
+
+## 1.3.0 - 2026-04-28
 - Added configurable S3 `MediaBucketPrefix` and `CacheBucketPrefix` support while keeping public media URLs based on Umbraco's media path unless `BucketHostName` is configured.
 - Normalized configured media/cache bucket prefixes to avoid malformed keys and cross-prefix collisions.
+- Fixed public URL generation so custom media bucket prefixes do not leak into local Umbraco media URLs unless `BucketHostName` is configured.
+- Added configurable cache-prefix handling for mirrored media cache and ImageSharp transformed cache files.
+- Updated package metadata, README, Marketplace description, and release notes for the new prefix support.
+- Thanks to [proxicode](https://github.com/proxicode) for the configurable bucket-prefix contribution and related integration fixes in [PR #4](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/4).
+- Thanks to [koty10](https://github.com/koty10) for the SVG upload-validation fix in [PR #3](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3).
 - Added xUnit regression tests for ImageSharp upload validation rules:
   - SVG files are not passed to ImageSharp validation;
   - invalid PNG content still requires ImageSharp validation and is rejected.
