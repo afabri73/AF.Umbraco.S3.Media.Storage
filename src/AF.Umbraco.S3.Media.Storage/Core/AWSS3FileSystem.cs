@@ -45,7 +45,12 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// The S3 key prefix used as the root folder for media storage. 
         /// Defaults to "media" if not overridden in configuration.
         /// </summary>
-        private readonly string _bucketPrefix;
+        private readonly string _mediaBucketPrefix;
+        /// <summary>
+        /// The S3 key prefix used as the root folder for cache storage.
+        /// Defaults to "cache" if not overridden in configuration.
+        /// </summary>
+        private readonly string _cacheBucketPrefix;
         /// <summary>
         /// Gets the bucket name used by this component.
         /// </summary>
@@ -119,7 +124,8 @@ namespace AF.Umbraco.S3.Media.Storage.Core
 
             _rootUrl = EnsureUrlSeparatorChar(hostingEnvironment.ToAbsolute(options.VirtualPath)).TrimEnd('/');
 
-            _bucketPrefix = options.BucketPrefix ?? _rootUrl;
+            _mediaBucketPrefix = AWSS3FileSystemOptions.NormalizeBucketPrefix(options.MediaBucketPrefix, AWSS3FileSystemOptions.DefaultMediaBucketPrefix);
+            _cacheBucketPrefix = AWSS3FileSystemOptions.NormalizeBucketPrefix(options.CacheBucketPrefix, AWSS3FileSystemOptions.DefaultCacheBucketPrefix);
             _cannedACL = options.CannedACL;
             _serverSideEncryptionMethod = options.ServerSideEncryptionMethod;
             _rootPath = hostingEnvironment.ToAbsolute(options.VirtualPath);
@@ -127,7 +133,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             _mimeTypeResolver = mimeTypeResolver;
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
 
-            _bucketHostName = options.BucketHostName?.TrimEnd('/') ?? string.Empty;
+            _bucketHostName = options.BucketHostName?.Trim().TrimEnd('/') ?? string.Empty;
 
             _S3Client = s3Client;
         }
@@ -586,10 +592,10 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 fullPathOrUrl = fullPathOrUrl.TrimStart(Delimiter.ToCharArray());
             }
 
-            //Strip Bucket Prefix
-            if (fullPathOrUrl.StartsWith(_bucketPrefix, StringComparison.InvariantCultureIgnoreCase))
+            // Strip media bucket prefix.
+            if (IsMediaBucketPrefixPath(fullPathOrUrl))
             {
-                fullPathOrUrl = fullPathOrUrl[_bucketPrefix.Length..];
+                fullPathOrUrl = fullPathOrUrl[_mediaBucketPrefix.Length..];
                 fullPathOrUrl = fullPathOrUrl.TrimStart(Delimiter.ToCharArray());
             }
 
@@ -614,7 +620,14 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// <returns>The full public URL for the media file.</returns>
         public string GetUrl(string path)
         {
-            return string.Concat(_bucketHostName, "/", ResolveBucketPath(path));
+            string bucketPath = ResolveBucketPath(path);
+
+            if (!string.IsNullOrWhiteSpace(_bucketHostName))
+            {
+                return CombineUrl(_bucketHostName, bucketPath);
+            }
+
+            return CombineUrl(_rootUrl, RemovePrefix(bucketPath));
         }
 
         /// <summary>
@@ -837,8 +850,8 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 .Replace("\\", Delimiter, StringComparison.Ordinal)
                 .ToLowerInvariant();
 
-            string normalizedPathWithoutMedia = TrimLeadingMediaSegment(normalizedPath);
-            return $"cache/{normalizedPathWithoutMedia}";
+            string cacheSourcePath = GetCacheSourcePath(normalizedPath);
+            return $"{GetCacheRootPrefix()}/{cacheSourcePath}";
         }
 
         /// <summary>
@@ -883,28 +896,50 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 return;
             }
 
-            string normalizedPathWithoutMedia = TrimLeadingMediaSegment(normalizedPath);
-            string[] candidates = [.. new[] { normalizedPath, normalizedPathWithoutMedia }
+            string cacheSourcePath = GetCacheSourcePath(normalizedPath);
+            string escapedNormalizedPath = Uri.EscapeDataString(normalizedPath).Replace("%2F", Delimiter);
+            string escapedCacheSourcePath = Uri.EscapeDataString(cacheSourcePath).Replace("%2F", Delimiter);
+            string[] candidates = [.. new[]
+                {
+                    $"{GetCacheRootPrefix()}/{escapedCacheSourcePath}/",
+                    $"cache/{escapedCacheSourcePath}/",
+                    $"cache/{escapedNormalizedPath}/",
+                    $"cache/cache/{escapedCacheSourcePath}/",
+                    $"cache/cache/{escapedNormalizedPath}/"
+                }
                 .Where(p => !string.IsNullOrWhiteSpace(p))
                 .Distinct(StringComparer.Ordinal)];
 
-            foreach (string candidate in candidates)
+            foreach (string candidatePrefix in candidates)
             {
-                string escapedPath = Uri.EscapeDataString(candidate).Replace("%2F", Delimiter);
-                DeleteObjectsByPrefix($"cache/{escapedPath}/");
-                DeleteObjectsByPrefix($"cache/cache/{escapedPath}/");
+                DeleteObjectsByPrefix(candidatePrefix);
             }
         }
 
         /// <summary>
-        /// Removes the leading bucket prefix segment from a normalized path when present.
+        /// Removes the leading default media segment from cache paths to preserve the historic cache layout.
         /// </summary>
         /// <param name="normalizedPath">The normalized source path.</param>
-        /// <returns>The path without the leading bucket prefix segment.</returns>
-        private string TrimLeadingMediaSegment(string normalizedPath) =>
-            normalizedPath.StartsWith(_bucketPrefix + "/", StringComparison.Ordinal)
-                ? normalizedPath[(_bucketPrefix.Length + 1)..]
+        /// <returns>The path without the leading default media segment.</returns>
+        private string TrimLeadingDefaultMediaSegment(string normalizedPath) =>
+            _mediaBucketPrefix == AWSS3FileSystemOptions.DefaultMediaBucketPrefix
+            && normalizedPath.StartsWith(AWSS3FileSystemOptions.DefaultMediaBucketPrefix + "/", StringComparison.Ordinal)
+                ? normalizedPath[(AWSS3FileSystemOptions.DefaultMediaBucketPrefix.Length + 1)..]
                 : normalizedPath;
+
+        private string GetCacheSourcePath(string normalizedPath)
+        {
+            if (_mediaBucketPrefix == AWSS3FileSystemOptions.DefaultMediaBucketPrefix)
+            {
+                return TrimLeadingDefaultMediaSegment(normalizedPath);
+            }
+
+            return IsMediaBucketPrefixPath(normalizedPath)
+                ? normalizedPath[_mediaBucketPrefix.Length..].TrimStart(Delimiter.ToCharArray())
+                : normalizedPath;
+        }
+
+        private string GetCacheRootPrefix() => _cacheBucketPrefix;
 
         /// <summary>
         /// Resolves bucket Path.
@@ -915,13 +950,13 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         public string ResolveBucketPath(string path, bool isDir = false)
         {
             if (string.IsNullOrEmpty(path))
-                return _bucketPrefix;
+                return _mediaBucketPrefix;
 
             // Equalise delimiters
             path = path.Replace("/", Delimiter).Replace("\\", Delimiter);
 
-            //Strip Root Path
-            if (path.StartsWith(_rootPath, StringComparison.InvariantCultureIgnoreCase))
+            // Strip root path without matching partial sibling paths.
+            if (IsRootPath(path))
             {
                 path = path[_rootPath.Length..];
                 path = path.TrimStart(Delimiter.ToCharArray());
@@ -930,9 +965,9 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             if (path.StartsWith(Delimiter))
                 path = path[1..];
 
-            //Remove Key Prefix If Duplicate
-            if (path.StartsWith(_bucketPrefix, StringComparison.InvariantCultureIgnoreCase))
-                path = path[_bucketPrefix.Length..];
+            // Remove key prefix if duplicate, without matching partial sibling prefixes.
+            if (IsMediaBucketPrefixPath(path))
+                path = path[_mediaBucketPrefix.Length..];
 
             if (isDir && !path.EndsWith(Delimiter))
                 path = string.Concat(path, Delimiter);
@@ -940,7 +975,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             if (path.StartsWith(Delimiter))
                 path = path[1..];
 
-            return string.Concat(_bucketPrefix, "/", WebUtility.UrlDecode(path));
+            return string.Concat(_mediaBucketPrefix, "/", WebUtility.UrlDecode(path));
         }
 
         /// <summary>
@@ -950,10 +985,30 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// <returns>The normalized key without bucket prefix.</returns>
         protected virtual string RemovePrefix(string key)
         {
-            if (!string.IsNullOrEmpty(_bucketPrefix) && key.StartsWith(_bucketPrefix))
-                key = key[_bucketPrefix.Length..];
+            if (IsMediaBucketPrefixPath(key))
+                key = key[_mediaBucketPrefix.Length..];
 
             return key.TrimStart(Delimiter.ToCharArray()).TrimEnd(Delimiter.ToCharArray());
+        }
+
+        private bool IsMediaBucketPrefixPath(string path) =>
+            !string.IsNullOrEmpty(_mediaBucketPrefix)
+            && (path.Equals(_mediaBucketPrefix, StringComparison.InvariantCultureIgnoreCase)
+                || path.StartsWith(_mediaBucketPrefix + Delimiter, StringComparison.InvariantCultureIgnoreCase));
+
+        private bool IsRootPath(string path) =>
+            !string.IsNullOrEmpty(_rootPath)
+            && (path.Equals(_rootPath, StringComparison.InvariantCultureIgnoreCase)
+                || path.StartsWith(_rootPath.TrimEnd(Delimiter.ToCharArray()) + Delimiter, StringComparison.InvariantCultureIgnoreCase));
+
+        private static string CombineUrl(string root, string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return root;
+            }
+
+            return string.Concat(root.TrimEnd('/'), "/", path.TrimStart('/'));
         }
 
 

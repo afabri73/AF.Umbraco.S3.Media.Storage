@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- Added configurable S3 `MediaBucketPrefix` and `CacheBucketPrefix` support while keeping public media URLs based on Umbraco's media path unless `BucketHostName` is configured.
+- Normalized configured media/cache bucket prefixes to avoid malformed keys and cross-prefix collisions.
 - Added xUnit regression tests for ImageSharp upload validation rules:
   - SVG files are not passed to ImageSharp validation;
   - invalid PNG content still requires ImageSharp validation and is rejected.

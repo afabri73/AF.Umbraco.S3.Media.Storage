@@ -1,15 +1,3 @@
-## Fork Notice
-
-This is a fork of [AF.Umbraco.S3.Media.Storage](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage) 
-by Adriano Fabri.
-
-**Changes in this fork:**
-- Made `BucketPrefix` configurable via `appsettings.json` (was previously hardcoded to `"media"`)
-
-A [pull request](link-to-your-pr) has been opened against the upstream repo. 
-If merged, this fork will be retired in favour of the official package.
-
-
 # AF.Umbraco.S3.Media.Storage
 
 AWS S3 media storage provider for Umbraco 15/16/17 on .NET 9/10.
@@ -33,6 +21,11 @@ This project is a porting of `Our.Umbraco.StorageProviders.AWSS3`
 which is not compatible with recent Umbraco versions.
 
 `AF.Umbraco.S3.Media.Storage` was fully refactored to be compatible with modern Umbraco versions and then further optimized and extended.
+
+Thanks to community contributors:
+
+- [koty10](https://github.com/koty10) for the SVG upload-validation fix in [PR #3](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3).
+- [proxicode](https://github.com/proxicode) for the configurable bucket-prefix contribution and related integration fixes in [PR #4](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/4).
 
 ## Compatibility
 
@@ -94,6 +87,27 @@ Minimal setup:
   }
 }
 ```
+
+Optional S3 object prefixes:
+
+```json
+{
+  "Umbraco": {
+    "Storage": {
+      "AWSS3": {
+        "Media": {
+          "BucketName": "your-media-bucket",
+          "Region": "eu-west-1",
+          "MediaBucketPrefix": "tenant-a/media",
+          "CacheBucketPrefix": "tenant-a/cache"
+        }
+      }
+    }
+  }
+}
+```
+
+`MediaBucketPrefix` controls the internal S3 object key prefix for original media files. `CacheBucketPrefix` controls mirrored media cache and ImageSharp transformed cache keys. Public media URLs still use Umbraco's configured media path, normally `/media`, unless `BucketHostName` is configured for CDN/S3 public URLs.
 
 For public/open-source repositories, keep placeholders in `appsettings.Development.json` and store real local values in `appsettings.Local.json` (git-ignored).
 
@@ -193,9 +207,9 @@ These endpoints are disabled by default.
 
 ## S3 object layout
 
-- Original media files: `media/...`
-- Mirrored media cache (all media types): `cache/...`
-- ImageSharp transformed cache: `cache/...` (under transformed keys)
+- Original media files: `media/...` by default, or `{MediaBucketPrefix}/...` when configured.
+- Mirrored media cache (all media types): `cache/...` by default, or `{CacheBucketPrefix}/...` when configured.
+- ImageSharp transformed cache: `cache/...` by default, or `{CacheBucketPrefix}/...` when configured.
 - For ease of management, the `cache` folder replicates the `media` folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.
 
 ## Localization for validation errors

@@ -91,9 +91,9 @@ Responsibilities:
 
 ## Storage layout in S3
 
-- Original media: `media/{path...}`
-- Mirrored media cache: `cache/{path...}` (supported images only)
-- Image cache: `cache/{path...}`
+- Original media: `media/{path...}` by default, or `{MediaBucketPrefix}/{path...}` when configured.
+- Mirrored media cache: `cache/{path...}` by default, or `{CacheBucketPrefix}/{path...}` when configured (supported images only).
+- Image cache: `cache/{path...}` by default, or `{CacheBucketPrefix}/{path...}` when configured.
 - For ease of management, the cache folder replicates the media folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.
 
 ## Retention strategy

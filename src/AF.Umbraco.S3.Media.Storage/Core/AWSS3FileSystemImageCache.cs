@@ -32,9 +32,9 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// </summary>
         private const string LogPrefix = "[AFUS3MS]";
         /// <summary>
-        /// Root folder used for cached image objects in S3.
+        /// Default root folder used for cached image objects in S3.
         /// </summary>
-        private const string _cachePath = "cache/";
+        private const string DefaultCachePath = "cache";
         /// <summary>
         /// Named filesystem registration used to resolve options.
         /// </summary>
@@ -63,6 +63,10 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// Target bucket name used for cache operations.
         /// </summary>
         private string _bucketName = string.Empty;
+        /// <summary>
+        /// Root folder used for cached image objects in S3.
+        /// </summary>
+        private string _cachePath = DefaultCachePath;
         /// <summary>
         /// Indicates whether retention cleanup is enabled.
         /// </summary>
@@ -148,7 +152,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// <returns>A task containing the cache resolver for the key.</returns>
         public async Task<IImageCacheResolver> GetAsync(string key)
         {
-            string cacheAndKey = Path.Combine(_cachePath, key);
+            string cacheAndKey = BuildCacheKey(key);
 
             return await baseCache.GetAsync(cacheAndKey);
         }
@@ -162,7 +166,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// <returns>A task that represents the asynchronous operation.</returns>
         public Task SetAsync(string key, Stream stream, ImageCacheMetadata metadata)
         {
-            string cacheAndKey = Path.Combine(_cachePath, key);
+            string cacheAndKey = BuildCacheKey(key);
             return SetAndCleanupAsync(cacheAndKey, stream, metadata);
         }
 
@@ -285,6 +289,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         private void ApplyCacheRetentionSettings(AWSS3FileSystemOptions options)
         {
             _bucketName = options.BucketName ?? string.Empty;
+            _cachePath = BuildCachePath(options.CacheBucketPrefix);
             AWSS3CacheRetentionOptions retention = options.CacheRetention ?? new AWSS3CacheRetentionOptions();
 
             if (retention.TestModeEnable)
@@ -329,7 +334,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 }
 
                 DateTime cutoff = DateTime.UtcNow.Subtract(_cacheRetentionMaxAge);
-                string[] prefixes = [_cachePath, "cache/cache/"];
+                string[] prefixes = [$"{_cachePath}/", $"{_cachePath}/cache/"];
                 var expired = new List<KeyVersion>();
 
                 if (string.IsNullOrWhiteSpace(_bucketName))
@@ -382,6 +387,18 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             {
                 _retentionSweepLock.Release();
             }
+        }
+
+        private string BuildCacheKey(string key) =>
+            string.Concat(_cachePath.TrimEnd('/'), "/", key.TrimStart('/').Replace("\\", "/", StringComparison.Ordinal));
+
+        private static string BuildCachePath(string bucketPrefix)
+        {
+            string normalizedBucketPrefix = AWSS3FileSystemOptions.NormalizeBucketPrefix(bucketPrefix, AWSS3FileSystemOptions.DefaultCacheBucketPrefix);
+
+            return normalizedBucketPrefix == AWSS3FileSystemOptions.DefaultCacheBucketPrefix
+                ? DefaultCachePath
+                : normalizedBucketPrefix;
         }
 
         /// <summary>
