@@ -96,9 +96,13 @@ src/Umbraco.Cms.16.x/appsettings.*.local.json
 src/Umbraco.Cms.15.x/appsettings.*.local.json
 *.log
 *.binlog
+
+# custom folders for local-only data
 artifacts/
 _artifacts/
-direttive
+backlogs/
+_backlogs/
+direttive/
 _direttive/
 directives/
 _directives/
