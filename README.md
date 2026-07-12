@@ -36,7 +36,7 @@ Thanks to community contributors:
 
 ## Current Release
 
-`1.4.0` adds Umbraco `18.x` compatibility (`Umbraco.Cms.Web.Common` version range widened to `[15.0.0,19.0.0)`) and a `src/Umbraco.Cms.18.x` local test host. Umbraco 18 keeps the same `IComposer`/`IUmbracoBuilder` composition model this package relies on, but it changed `UmbracoPipelineFilter`'s constructor from 6 parameters (`name` + 5 `Action<IApplicationBuilder>`) to 8 (adding `Action<IEndpointRouteBuilder>` stages for endpoint mapping). The previous composer called that constructor directly, which threw `MissingMethodException` at runtime under Umbraco 18. `AWSS3Composer` now constructs each `UmbracoPipelineFilter` with the single-argument constructor and sets `PrePipeline` via an object initializer instead, since that property is unchanged across Umbraco 15-18. Umbraco 18 only ships for `.NET 10`, so the 18.x host targets `net10.0` only.
+`1.4.0` adds Umbraco `18.x` compatibility and updates `AWSS3Composer` for Umbraco 18's changed `UmbracoPipelineFilter` constructor, continuing compatibility across Umbraco `15.x`-`18.x`.
 
 `1.3.0` adds configurable S3 `MediaBucketPrefix` and `CacheBucketPrefix` support, keeps local public media URLs on Umbraco's media path unless `BucketHostName` is configured, normalizes configured prefixes, and adds regression tests/documentation for the new behavior.
 
