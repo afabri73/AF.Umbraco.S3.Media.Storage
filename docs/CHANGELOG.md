@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Fixed `AWSS3FileSystemMiddleware` ignoring ImageSharp resize commands (`?width=`/`?height=`/crop): it built its S3 lookup key from the request path only, never the query string, and always served the original file directly from S3 without ever calling `next()` once found. Already-uploaded media therefore always returned the untouched original regardless of resize query parameters. The middleware now checks `IRequestParser.ParseRequestCommands` and defers to `next()` whenever the request carries processing commands, letting ImageSharp's own middleware handle it regardless of pipeline registration order.
+- Fixed the package's `IImageCache` registration losing to Umbraco Core's own default (local-disk) image cache: `AddAWSS3MediaFileSystem()` used `TryAddSingleton`, which is a no-op whenever Umbraco's own ImageSharp composer registers its default cache first. Resized images were therefore cached to local disk (`umbraco/Data/TEMP/MediaCache`) instead of S3, so the S3 `cache/` folder never received new entries even once resizing itself worked. Now uses `Replace`, matching the existing pattern already used for `ICacheHash`. Verified end-to-end against a real S3 bucket: resizing the same image at two different widths now produces two distinct objects under `cache/<mediaId>/<filename>/`.
 
 ## 1.4.0 - 2026-07-12
 - Added Umbraco 18.x compatibility by widening the `Umbraco.Cms.Web.Common` package reference range to `[15.0.0,19.0.0)`.

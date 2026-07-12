@@ -40,7 +40,7 @@ namespace AF.Umbraco.S3.Media.Storage.Extensions
 
             // ImageSharp image provider/cache
             builder.Services.Insert(0, ServiceDescriptor.Singleton<IImageProvider, AWSS3FileSystemImageProvider>());
-            builder.Services.TryAddSingleton<IImageCache, AWSS3FileSystemImageCache>();
+            builder.Services.Replace(ServiceDescriptor.Singleton<IImageCache, AWSS3FileSystemImageCache>());
             builder.Services.Replace(ServiceDescriptor.Singleton<ICacheHash, AWSS3ScopedCacheHash>());
 
             builder.SetMediaFileSystem(provider => provider.GetRequiredService<IAWSS3FileSystemProvider>()
