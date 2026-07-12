@@ -7,7 +7,7 @@ This manual describes the operational activities required to configure, test, re
 ## Requirements
 
 - .NET SDK compatible with the package targets: `net9.0` and `net10.0`.
-- Umbraco CMS `15.x`, `16.x`, or `17.x`.
+- Umbraco CMS `15.x`, `16.x`, `17.x`, or `18.x` (`18.x` requires `net10.0`).
 - An AWS S3 bucket or a compatible local service, for example MinIO.
 - AWS credentials configured through environment variables, a local profile, or the standard AWS SDK provider chain.
 

@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Umbraco", "Umbraco", "{9C76
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.17.x", "Umbraco.Cms.17.x\Umbraco.Cms.17.x.csproj", "{857B8252-6502-4DC2-AE60-0C90AB4E8D0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.18.x", "Umbraco.Cms.18.x\Umbraco.Cms.18.x.csproj", "{7FEA4467-C998-4BF1-9550-401667D1A00D}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Brand", "Brand", "{0046133B-C1EA-2ECF-3423-6FBB4FB59C56}"
 	ProjectSection(SolutionItems) = preProject
 		..\brand\Logo.jpg = ..\brand\Logo.jpg
@@ -100,6 +102,18 @@ Global
 		{11497AD0-AD9A-49AB-8CF6-4A1E09A49D37}.Release|x64.Build.0 = Release|Any CPU
 		{11497AD0-AD9A-49AB-8CF6-4A1E09A49D37}.Release|x86.ActiveCfg = Release|Any CPU
 		{11497AD0-AD9A-49AB-8CF6-4A1E09A49D37}.Release|x86.Build.0 = Release|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Debug|x64.Build.0 = Debug|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Debug|x86.Build.0 = Debug|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Release|x64.ActiveCfg = Release|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Release|x64.Build.0 = Release|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Release|x86.ActiveCfg = Release|Any CPU
+		{7FEA4467-C998-4BF1-9550-401667D1A00D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

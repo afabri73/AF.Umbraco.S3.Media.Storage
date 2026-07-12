@@ -2,18 +2,32 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Umbraco (Kestrel)",
+      "name": "Umbraco 17.x (Kestrel)",
       "type": "dotnet",
       "request": "launch",
       "projectPath": "${workspaceFolder}/src/Umbraco.Cms.17.x/Umbraco.Cms.17.x.csproj",
       "preLaunchTask": "build Umbraco.Cms.17.x"
     },
     {
-      "name": "Umbraco (IIS Express)",
+      "name": "Umbraco 17.x (IIS Express)",
       "type": "dotnet",
       "request": "launch",
       "projectPath": "${workspaceFolder}/src/Umbraco.Cms.17.x/Umbraco.Cms.17.x.csproj",
       "preLaunchTask": "build Umbraco.Cms.17.x"
+    },
+    {
+      "name": "Umbraco 18.x (Kestrel)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Umbraco.Cms.18.x/Umbraco.Cms.18.x.csproj",
+      "preLaunchTask": "build Umbraco.Cms.18.x"
+    },
+    {
+      "name": "Umbraco 18.x (IIS Express)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Umbraco.Cms.18.x/Umbraco.Cms.18.x.csproj",
+      "preLaunchTask": "build Umbraco.Cms.18.x"
     }
   ]
 }

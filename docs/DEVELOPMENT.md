@@ -6,6 +6,7 @@ Test hosts are available under:
 - `src/Umbraco.Cms.15.x`
 - `src/Umbraco.Cms.16.x`
 - `src/Umbraco.Cms.17.x`
+- `src/Umbraco.Cms.18.x`
 
 ## Local build
 ```bash

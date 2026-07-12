@@ -16,6 +16,7 @@ Compatibility validation hosts:
 - `src/Umbraco.Cms.15.x` (`net9.0`, `net10.0`)
 - `src/Umbraco.Cms.16.x` (`net9.0`, `net10.0`)
 - `src/Umbraco.Cms.17.x` (`net10.0`)
+- `src/Umbraco.Cms.18.x` (`net10.0`)
 
 ## High-level flow
 

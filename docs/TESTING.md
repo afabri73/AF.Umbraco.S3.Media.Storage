@@ -5,7 +5,7 @@
 The testing strategy covers three levels:
 
 - package unit tests;
-- local Umbraco hosts for `15.x`, `16.x`, and `17.x` compatibility;
+- local Umbraco hosts for `15.x`, `16.x`, `17.x`, and `18.x` compatibility;
 - optional smoke endpoints for startup, S3 configuration, and media upload validation.
 
 ## Unit Tests
@@ -63,5 +63,6 @@ The solution includes these hosts:
 - `src/Umbraco.Cms.15.x`
 - `src/Umbraco.Cms.16.x`
 - `src/Umbraco.Cms.17.x`
+- `src/Umbraco.Cms.18.x`
 
 Use these hosts to validate Umbraco startup, media upload, `/media` reads, S3 cache behavior, and localized messages.

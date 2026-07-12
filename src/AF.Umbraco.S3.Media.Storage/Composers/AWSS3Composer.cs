@@ -51,20 +51,23 @@ namespace AF.Umbraco.S3.Media.Storage.Composers
             builder.Services.AddHostedService<AWSS3StartupConnectivityHostedService>();
             builder.Services.Configure<UmbracoPipelineOptions>(options =>
             {
-                options.AddFilter(new UmbracoPipelineFilter(
-                    "AWSS3MediaFileSystem",
-                    prePipeline: app => app.UseAWSS3MediaFileSystem()));
+                options.AddFilter(new UmbracoPipelineFilter("AWSS3MediaFileSystem")
+                {
+                    PrePipeline = app => app.UseAWSS3MediaFileSystem()
+                });
 
                 if (Environment.GetEnvironmentVariable("AF_SMOKE_TESTS") == "1")
                 {
-                    options.AddFilter(new UmbracoPipelineFilter(
-                        "AWSS3SmokeTests",
-                        prePipeline: app => app.UseMiddleware<AWSS3SmokeTestsMiddleware>()));
+                    options.AddFilter(new UmbracoPipelineFilter("AWSS3SmokeTests")
+                    {
+                        PrePipeline = app => app.UseMiddleware<AWSS3SmokeTestsMiddleware>()
+                    });
                 }
 
-                options.AddFilter(new UmbracoPipelineFilter(
-                    "AWSS3UploadValidation",
-                    prePipeline: app => app.UseMiddleware<AWSS3UploadValidationExceptionMiddleware>()));
+                options.AddFilter(new UmbracoPipelineFilter("AWSS3UploadValidation")
+                {
+                    PrePipeline = app => app.UseMiddleware<AWSS3UploadValidationExceptionMiddleware>()
+                });
             });
         }
     }

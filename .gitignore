@@ -84,18 +84,33 @@ src/Umbraco.Cms.15.x/umbraco-package-schema.json
 src/Umbraco.Cms.16.x/appsettings-schema.json
 src/Umbraco.Cms.16.x/appsettings-schema.Umbraco.Cms.json
 src/Umbraco.Cms.16.x/umbraco-package-schema.json
+src/Umbraco.Cms.18.x/umbraco/Data/
+src/Umbraco.Cms.18.x/umbraco/Logs/
+src/Umbraco.Cms.18.x/wwwroot/media/
+src/Umbraco.Cms.18.x/wwwroot/cache/
+src/Umbraco.Cms.18.x/wwwroot/umbraco/
+src/Umbraco.Cms.18.x/appsettings-schema.json
+src/Umbraco.Cms.18.x/appsettings-schema.Umbraco.Cms.json
+src/Umbraco.Cms.18.x/umbraco-package-schema.json
 
 # Local-only config variants
 appsettings.Local.json
 src/Umbraco.Cms.17.x/appsettings.Local.json
 src/Umbraco.Cms.16.x/appsettings.Local.json
 src/Umbraco.Cms.15.x/appsettings.Local.json
+src/Umbraco.Cms.18.x/appsettings.Local.json
 appsettings.*.local.json
 src/Umbraco.Cms.17.x/appsettings.*.local.json
 src/Umbraco.Cms.16.x/appsettings.*.local.json
 src/Umbraco.Cms.15.x/appsettings.*.local.json
+src/Umbraco.Cms.18.x/appsettings.*.local.json
 *.log
 *.binlog
+
+# Secrets - never commit real credentials
+.env
+.env.*
+!.env.example
 
 # custom folders for local-only data
 artifacts/

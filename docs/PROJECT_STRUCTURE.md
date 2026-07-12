@@ -6,7 +6,7 @@ This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 ## Rules
 - Package source code lives under `src/AF.Umbraco.S3.Media.Storage`.
 - Unit tests live under `src/AF.Umbraco.S3.Media.Storage.Tests`.
-- `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, and `src/Umbraco.Cms.17.x` are test hosts used for compatibility validation.
+- `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, `src/Umbraco.Cms.17.x`, and `src/Umbraco.Cms.18.x` are test hosts used for compatibility validation.
 - Folders are organized by technical responsibility.
 - XML documentation is expected across the package codebase (classes, methods, and properties).
 

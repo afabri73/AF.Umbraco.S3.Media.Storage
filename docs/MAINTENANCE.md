@@ -4,7 +4,7 @@ _Last updated: 2026-02-05_
 ## Routine checks
 - Build the package and verify there are no warnings/errors.
 - Run the unit test project before validating host behavior.
-- Validate media upload/read in all test hosts (`Umbraco.Cms.15.x`, `Umbraco.Cms.16.x`, `Umbraco.Cms.17.x`).
+- Validate media upload/read in all test hosts (`Umbraco.Cms.15.x`, `Umbraco.Cms.16.x`, `Umbraco.Cms.17.x`, `Umbraco.Cms.18.x`).
 - Confirm S3 bucket access and object lifecycle rules.
 - Confirm XML documentation is present for classes, methods, and properties.
 - Confirm XML comments and updated technical documentation remain in English.

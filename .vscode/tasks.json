@@ -14,6 +14,27 @@
         "/bl:${workspaceFolder}/msbuild.binlog",
         "/flp:logfile=${workspaceFolder}/msbuild.log;verbosity=diagnostic"
       ],
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/usr/local/share/dotnet:${env:PATH}"
+        }
+      }
+    },
+    {
+      "label": "build Umbraco.Cms.18.x",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/Umbraco.Cms.18.x/Umbraco.Cms.18.x.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:Summary;ErrorsOnly",
+        "/v:minimal",
+        "/bl:${workspaceFolder}/msbuild.binlog",
+        "/flp:logfile=${workspaceFolder}/msbuild.log;verbosity=diagnostic"
+      ],
       "group": {
         "kind": "build",
         "isDefault": true

@@ -1,6 +1,6 @@
 # AF.Umbraco.S3.Media.Storage
 
-AWS S3 media storage provider for Umbraco 15/16/17 on .NET 9/10.
+AWS S3 media storage provider for Umbraco 15/16/17/18 on .NET 9/10.
 
 This package replaces the default media file system with an S3-backed implementation and includes:
 
@@ -29,12 +29,14 @@ Thanks to community contributors:
 
 ## Compatibility
 
-- Current package version: `1.3.0`
-- Umbraco CMS: `15.x`, `16.x`, `17.x`
-- .NET: `9.0`, `10.0`
+- Current package version: `1.4.0`
+- Umbraco CMS: `15.x`, `16.x`, `17.x`, `18.x`
+- .NET: `9.0`, `10.0` (Umbraco 18.x requires `10.0`)
 - AWS SDK for .NET: `AWSSDK.S3` + `AWSSDK.Extensions.NETCore.Setup`
 
 ## Current Release
+
+`1.4.0` adds Umbraco `18.x` compatibility (`Umbraco.Cms.Web.Common` version range widened to `[15.0.0,19.0.0)`) and a `src/Umbraco.Cms.18.x` local test host. No code changes were required in the composer or providers; Umbraco 18 keeps the same `IComposer`/`IUmbracoBuilder` composition APIs this package relies on. Umbraco 18 only ships for `.NET 10`, so the 18.x host targets `net10.0` only.
 
 `1.3.0` adds configurable S3 `MediaBucketPrefix` and `CacheBucketPrefix` support, keeps local public media URLs on Umbraco's media path unless `BucketHostName` is configured, normalizes configured prefixes, and adds regression tests/documentation for the new behavior.
 
@@ -42,7 +44,7 @@ Thanks to [proxicode](https://github.com/proxicode) for the configurable bucket-
 
 ## Test hosts and smoke CI
 
-- Local compatibility hosts are included under `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, and `src/Umbraco.Cms.17.x`.
+- Local compatibility hosts are included under `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, `src/Umbraco.Cms.17.x`, and `src/Umbraco.Cms.18.x`.
 - Each host supports local overrides through `appsettings.Local.json`.
 
 ## Build and test
