@@ -3,6 +3,7 @@ using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using SixLabors.ImageSharp.Web.Commands;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -50,6 +51,10 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
         /// Gets the s 3 client used by this component.
         /// </summary>
         private readonly IAmazonS3 _s3Client;
+        /// <summary>
+        /// Parses ImageSharp processing commands from the current request.
+        /// </summary>
+        private readonly IRequestParser _requestParser;
 
         /// <summary>
         /// Creates a new instance of <see cref="AWSS3FileSystemMiddleware" />.
@@ -57,9 +62,9 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
         /// <param name="options">The options.</param>
         /// <param name="fileSystemProvider">The file system provider.</param>
         /// <param name="hostingEnvironment">The hosting environment.</param>
-        /// 
-        public AWSS3FileSystemMiddleware(IOptionsMonitor<AWSS3FileSystemOptions> options, IAWSS3FileSystemProvider fileSystemProvider, IHostingEnvironment hostingEnvironment, IAmazonS3 s3Client)
-            : this(AWSS3FileSystemOptions.MediaFileSystemName, options, fileSystemProvider, hostingEnvironment, s3Client)
+        ///
+        public AWSS3FileSystemMiddleware(IOptionsMonitor<AWSS3FileSystemOptions> options, IAWSS3FileSystemProvider fileSystemProvider, IHostingEnvironment hostingEnvironment, IAmazonS3 s3Client, IRequestParser requestParser)
+            : this(AWSS3FileSystemOptions.MediaFileSystemName, options, fileSystemProvider, hostingEnvironment, s3Client, requestParser)
         { }
 
         /// <summary>
@@ -75,14 +80,17 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
         /// or.
         /// name.
         /// or.
-        /// fileSystemProvider</exception>
-        protected AWSS3FileSystemMiddleware(string name, IOptionsMonitor<AWSS3FileSystemOptions> options, IAWSS3FileSystemProvider fileSystemProvider, IHostingEnvironment hostingEnvironment, IAmazonS3 s3Client)
+        /// fileSystemProvider
+        /// or.
+        /// requestParser</exception>
+        protected AWSS3FileSystemMiddleware(string name, IOptionsMonitor<AWSS3FileSystemOptions> options, IAWSS3FileSystemProvider fileSystemProvider, IHostingEnvironment hostingEnvironment, IAmazonS3 s3Client, IRequestParser requestParser)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
             if (hostingEnvironment == null) throw new ArgumentNullException(nameof(hostingEnvironment));
 
             _name = name ?? throw new ArgumentNullException(nameof(name));
             _fileSystemProvider = fileSystemProvider ?? throw new ArgumentNullException(nameof(fileSystemProvider));
+            _requestParser = requestParser ?? throw new ArgumentNullException(nameof(requestParser));
 
             var fileSystemOptions = options.Get(name);
             _rootPath = hostingEnvironment.ToAbsolute(fileSystemOptions.VirtualPath);
@@ -118,6 +126,15 @@ namespace AF.Umbraco.S3.Media.Storage.Middlewares
 
             if (!context.Request.Path.StartsWithSegments(_rootPath, StringComparison.InvariantCultureIgnoreCase))
             {
+                await next(context).ConfigureAwait(false);
+                return;
+            }
+
+            CommandCollection commands = _requestParser.ParseRequestCommands(context);
+            if (commands.Count > 0)
+            {
+                // Let ImageSharp's own middleware (registered at the same pipeline stage) handle
+                // command-bearing requests, regardless of relative registration order.
                 await next(context).ConfigureAwait(false);
                 return;
             }

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fixed `AWSS3FileSystemMiddleware` ignoring ImageSharp resize commands (`?width=`/`?height=`/crop): it built its S3 lookup key from the request path only, never the query string, and always served the original file directly from S3 without ever calling `next()` once found. Already-uploaded media therefore always returned the untouched original regardless of resize query parameters. The middleware now checks `IRequestParser.ParseRequestCommands` and defers to `next()` whenever the request carries processing commands, letting ImageSharp's own middleware handle it regardless of pipeline registration order.
 
 ## 1.3.0 - 2026-04-28
 - Added configurable S3 `MediaBucketPrefix` and `CacheBucketPrefix` support while keeping public media URLs based on Umbraco's media path unless `BucketHostName` is configured.
