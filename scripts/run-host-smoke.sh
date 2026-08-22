@@ -89,7 +89,7 @@ fi
 response="$(curl -fsS -X POST "http://127.0.0.1:${port}/smoke/media-upload")"
 echo "$response"
 
-if [[ "$response" != *'"exists":true'* ]]; then
+if [[ "$response" != *'"status":"ok"'* || "$response" != *'"content":"smoke-upload"'* ]]; then
   echo "Media upload smoke test failed: unexpected response." >&2
   cat "$log_file" >&2 || true
   exit 1
