@@ -117,6 +117,8 @@ artifacts/
 _artifacts/
 backlogs/
 _backlogs/
+handoff/
+_handoff/
 direttive/
 _direttive/
 directives/
