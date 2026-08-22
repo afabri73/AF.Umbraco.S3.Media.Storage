@@ -26,15 +26,18 @@ Thanks to community contributors:
 
 - [koty10](https://github.com/koty10) for the SVG upload-validation fix in [PR #3](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3).
 - [proxicode](https://github.com/proxicode) for the configurable bucket-prefix contribution and related integration fixes in [PR #4](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/4).
+- [suedeapple](https://github.com/suedeapple) for Umbraco 18 compatibility and the ImageSharp request-handling and S3 cache integration fixes in [PR #7](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/7).
 
 ## Compatibility
 
-- Current package version: `1.4.0`
+- Current package version: `1.4.1`
 - Umbraco CMS: `15.x`, `16.x`, `17.x`, `18.x`
 - .NET: `9.0`, `10.0` (Umbraco 18.x requires `10.0`)
 - AWS SDK for .NET: `AWSSDK.S3` + `AWSSDK.Extensions.NETCore.Setup`
 
 ## Current Release
+
+`1.4.1` updates contributor credits in the README and Umbraco Marketplace metadata.
 
 `1.4.0` adds Umbraco `18.x` compatibility and updates `AWSS3Composer` for Umbraco 18's changed `UmbracoPipelineFilter` constructor, continuing compatibility across Umbraco `15.x`-`18.x`. It also ensures ImageSharp resize requests are processed before S3 media delivery and stores transformed images in the configured S3 cache rather than the local default cache.
 

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 1.4.1 - 2026-08-23
+- Updated README and Umbraco Marketplace contributor credits to acknowledge [suedeapple](https://github.com/suedeapple) for the Umbraco 18 compatibility, ImageSharp request-handling, and S3 cache integration fixes contributed in [PR #7](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/7).
+
 ## 1.4.0 - 2026-08-23
 - Added Umbraco 18.x compatibility by widening the `Umbraco.Cms.Web.Common` package reference range to `[15.0.0,19.0.0)`.
 - Fixed a runtime `MissingMethodException` on `UmbracoPipelineFilter..ctor` under Umbraco 18: the composer previously called the 6-parameter constructor (`name` + 5 `Action<IApplicationBuilder>`), which Umbraco 18 replaced with an 8-parameter constructor that also adds `Action<IEndpointRouteBuilder>` stages. `AWSS3Composer` now uses the single-argument constructor plus object-initializer property assignment (`PrePipeline = ...`), which is stable across Umbraco 15-18.
