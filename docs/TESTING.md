@@ -31,6 +31,10 @@ This coverage matters because the same rule is used in two paths:
 - Management API upload validation middleware;
 - internal filesystem validation before storage in S3.
 
+### ImageSharp Delivery and Cache Regression
+
+The middleware regression suite verifies that media requests with ImageSharp commands are passed to ImageSharp processing, while ordinary media requests remain eligible for direct S3 delivery. The S3 cache registration must replace Umbraco's local default cache so transformed images are written to the configured S3 cache.
+
 ## Package Build
 
 Command:
@@ -65,4 +69,4 @@ The solution includes these hosts:
 - `src/Umbraco.Cms.17.x`
 - `src/Umbraco.Cms.18.x`
 
-Use these hosts to validate Umbraco startup, media upload, `/media` reads, S3 cache behavior, and localized messages.
+Use these hosts to validate Umbraco startup, media upload, `/media` reads, ImageSharp resize requests, S3 cache behavior, and localized messages. For standard AWS S3, also verify startup with `AWS:ServiceURL` unset.

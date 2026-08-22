@@ -1,15 +1,17 @@
 # Changelog
 
 ## Unreleased
-- Fixed `AWSS3FileSystemMiddleware` ignoring ImageSharp resize commands (`?width=`/`?height=`/crop): it built its S3 lookup key from the request path only, never the query string, and always served the original file directly from S3 without ever calling `next()` once found. Already-uploaded media therefore always returned the untouched original regardless of resize query parameters. The middleware now checks `IRequestParser.ParseRequestCommands` and defers to `next()` whenever the request carries processing commands, letting ImageSharp's own middleware handle it regardless of pipeline registration order.
-- Fixed the package's `IImageCache` registration losing to Umbraco Core's own default (local-disk) image cache: `AddAWSS3MediaFileSystem()` used `TryAddSingleton`, which is a no-op whenever Umbraco's own ImageSharp composer registers its default cache first. Resized images were therefore cached to local disk (`umbraco/Data/TEMP/MediaCache`) instead of S3, so the S3 `cache/` folder never received new entries even once resizing itself worked. Now uses `Replace`, matching the existing pattern already used for `ICacheHash`. Verified end-to-end against a real S3 bucket: resizing the same image at two different widths now produces two distinct objects under `cache/<mediaId>/<filename>/`.
 
-## 1.4.0 - 2026-07-12
+## 1.4.0 - 2026-08-23
 - Added Umbraco 18.x compatibility by widening the `Umbraco.Cms.Web.Common` package reference range to `[15.0.0,19.0.0)`.
 - Fixed a runtime `MissingMethodException` on `UmbracoPipelineFilter..ctor` under Umbraco 18: the composer previously called the 6-parameter constructor (`name` + 5 `Action<IApplicationBuilder>`), which Umbraco 18 replaced with an 8-parameter constructor that also adds `Action<IEndpointRouteBuilder>` stages. `AWSS3Composer` now uses the single-argument constructor plus object-initializer property assignment (`PrePipeline = ...`), which is stable across Umbraco 15-18.
 - Added a dedicated `Umbraco.Cms.18.x` local test host (targets `net10.0` only, matching Umbraco 18's own framework support).
 - Verified via `dotnet run` against all four hosts (15.x-18.x): each now boots through hosted-service startup and only fails at the (expected) placeholder S3 connectivity check, with no constructor-binding errors.
 - Updated README, package metadata, and Marketplace description/tags to include Umbraco 18.
+- Fixed `AWSS3FileSystemMiddleware` ignoring ImageSharp resize commands (`?width=`/`?height=`/crop): requests with processing commands now continue to ImageSharp instead of always returning the original S3 object.
+- Fixed `IImageCache` registration so `AWSS3FileSystemImageCache` replaces Umbraco's local default cache and transformed images are stored in S3.
+- Removed the placeholder `AWS:ServiceURL` override from development sample configurations. Standard AWS S3 now relies on the configured region; custom endpoint configuration remains documented for MinIO and other S3-compatible services.
+- Updated `AWSSDK.S3` to `4.0.101.4`; `AWSSDK.Extensions.NETCore.Setup` remains at `4.0.3.22`.
 
 ## 1.3.0 - 2026-04-28
 - Added configurable S3 `MediaBucketPrefix` and `CacheBucketPrefix` support while keeping public media URLs based on Umbraco's media path unless `BucketHostName` is configured.

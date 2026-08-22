@@ -16,7 +16,7 @@ This manual describes the operational activities required to configure, test, re
 1. Clone the repository.
 2. Configure one host under `src/Umbraco.Cms.*.x`.
 3. Store real local values only in `appsettings.Local.json`, which must stay out of version control.
-4. Verify `BucketName`, `Region`, `ServiceURL`, and `ForcePathStyle` when using MinIO.
+4. Verify `BucketName` and `Region`. Configure `ServiceURL` and `ForcePathStyle` only when using MinIO or another S3-compatible endpoint; standard AWS S3 must use regional endpoint resolution without a `ServiceURL` placeholder.
 
 ## Build
 
@@ -59,4 +59,5 @@ Verify:
 - SVG upload rejected: verify the installed version includes the `ImageSharpValidationFileTypes` rule.
 - Corrupted PNG/JPG files accepted: verify the write path goes through ImageSharp validation and unit tests are executed.
 - S3 errors during startup: check credentials, bucket, region, and permissions.
-- Media uploaded but cache missing: verify image format, MIME detection, and write permissions on the `cache/` prefix.
+- Media uploaded but cache missing: verify image format, MIME detection, ImageSharp request commands, and write permissions on the `cache/` prefix.
+- Startup waits before failing: remove any placeholder `AWS:ServiceURL`; the setting overrides the regional AWS endpoint and is intended only for explicit S3-compatible endpoints.

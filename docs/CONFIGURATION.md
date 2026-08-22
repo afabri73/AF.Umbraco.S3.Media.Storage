@@ -22,6 +22,8 @@ These settings do not change the public Umbraco media URL path. Public URLs cont
 - Use least-privilege IAM policies for the target bucket.
 - Keep production credentials out of source control.
 - Validate read/write/list permissions for media and cache keys.
+- For standard AWS S3, configure `AWS:Region` and credentials only. Do not configure `AWS:ServiceURL` with a placeholder because it overrides the regional endpoint and can cause slow DNS failures during the startup connectivity check.
+- Configure `AWS:ServiceURL` and `AWS:ForcePathStyle` only for S3-compatible endpoints such as MinIO. Keep these local endpoint settings in git-ignored `appsettings.Local.json`.
 
 ## Smoke endpoints (opt-in)
 Enable smoke endpoints for local validation and CI by setting:

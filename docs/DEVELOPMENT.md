@@ -30,6 +30,8 @@ The unit test project covers shared package rules that do not require a full Umb
   - Umbraco 15 on `.NET 9`
   - Umbraco 16 on `.NET 9`
 
+For standard AWS S3, leave `AWS:ServiceURL` unset. Set it only in `appsettings.Local.json` when validating MinIO or another S3-compatible endpoint.
+
 ## Caching behavior
 - Images are mirrored into cache using the original image stream.
 - Non-image files are not cached in this version.

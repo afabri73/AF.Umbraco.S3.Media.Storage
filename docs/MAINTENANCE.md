@@ -14,12 +14,14 @@ _Last updated: 2026-02-05_
 2. Run unit tests:
    - `dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj`
 3. Validate image upload and cache behavior, including SVG upload and invalid raster rejection.
-4. Verify non-image upload works without cache errors.
-5. Run smoke endpoint checks on compatibility hosts:
+4. Validate an ImageSharp resize request and confirm the transformed asset is stored under the configured S3 cache prefix rather than `umbraco/Data/TEMP/MediaCache`.
+5. Verify non-image upload works without cache errors.
+6. Run smoke endpoint checks on compatibility hosts:
    - `GET /smoke/health`
    - `POST /smoke/media-upload`
-6. Verify `[AFUS3MS]` logs have no package-level `Error/Fatal` events during startup/upload/cache/delete checks.
-7. Update documentation date and release notes.
+7. Verify `[AFUS3MS]` logs have no package-level `Error/Fatal` events during startup/upload/cache/delete checks.
+8. Confirm standard AWS configurations do not set `AWS:ServiceURL`; retain it only for explicit S3-compatible endpoints.
+9. Update documentation date and release notes.
 
 <!-- DOCSYNC:START -->
 ## Implementation Notes (Code-Aligned)

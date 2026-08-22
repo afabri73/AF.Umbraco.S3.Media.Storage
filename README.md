@@ -36,7 +36,7 @@ Thanks to community contributors:
 
 ## Current Release
 
-`1.4.0` adds Umbraco `18.x` compatibility and updates `AWSS3Composer` for Umbraco 18's changed `UmbracoPipelineFilter` constructor, continuing compatibility across Umbraco `15.x`-`18.x`.
+`1.4.0` adds Umbraco `18.x` compatibility and updates `AWSS3Composer` for Umbraco 18's changed `UmbracoPipelineFilter` constructor, continuing compatibility across Umbraco `15.x`-`18.x`. It also ensures ImageSharp resize requests are processed before S3 media delivery and stores transformed images in the configured S3 cache rather than the local default cache.
 
 `1.3.0` adds configurable S3 `MediaBucketPrefix` and `CacheBucketPrefix` support, keeps local public media URLs on Umbraco's media path unless `BucketHostName` is configured, normalizes configured prefixes, and adds regression tests/documentation for the new behavior.
 
@@ -120,7 +120,18 @@ Optional S3 object prefixes:
 
 For public/open-source repositories, keep placeholders in `appsettings.Development.json` and store real local values in `appsettings.Local.json` (git-ignored).
 
-Optional AWS section (local/non-IAM environments):
+For standard AWS endpoints, configure only the region and credentials; do not set `ServiceURL`:
+
+```json
+{
+  "AWS": {
+    "Profile": "YOUR_AWS_PROFILE",
+    "Region": "eu-west-1"
+  }
+}
+```
+
+Use `ServiceURL` only for a non-standard S3-compatible endpoint such as MinIO, and keep it in the git-ignored `appsettings.Local.json`:
 
 ```json
 {
@@ -138,7 +149,7 @@ Why two sections:
 - `Umbraco:Storage:AWSS3:Media` is package/provider configuration (`BucketName`, retention, media behavior).
 - `AWS` is AWS SDK client configuration (`Profile`, `ServiceURL`, `ForcePathStyle`, default `Region`).
 
-In short: `Storage` defines what the provider does, `AWS` defines how the SDK connects.
+In short: `Storage` defines what the provider does, `AWS` defines how the SDK connects. `ServiceURL` overrides the normal regional AWS endpoint resolution, so it must never contain a placeholder value in a configuration file that can be loaded at runtime.
 
 ### 3) AWS secrets for local development
 
