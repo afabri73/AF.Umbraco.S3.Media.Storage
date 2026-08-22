@@ -16,7 +16,7 @@
     <RepositoryUrl>https://github.com/afabri73/AF.Umbraco.S3.Media.Storage</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>1.4.0: Added Umbraco 18.x compatibility by widening the Umbraco.Cms.Web.Common version range to [15.0.0,19.0.0) and adding a src/Umbraco.Cms.18.x local test host. Fixed a runtime MissingMethodException on UmbracoPipelineFilter under Umbraco 18 (its constructor signature changed) by switching the composer to the version-stable single-argument constructor plus property initializers. 1.3.0: Added configurable MediaBucketPrefix and CacheBucketPrefix support with normalized S3 keys, corrected public GetUrl behavior so local media URLs stay on the Umbraco media path unless BucketHostName is configured, added configurable cache-prefix handling, and expanded regression tests/documentation. Thanks to koty10 for the SVG upload-validation fix in PR #3 and proxicode for the configurable bucket-prefix contribution and integration fixes in PR #4.</PackageReleaseNotes>
+    <PackageReleaseNotes>1.4.0: Added Umbraco 18.x compatibility by widening the Umbraco.Cms.Web.Common version range to [15.0.0,19.0.0) and adding a src/Umbraco.Cms.18.x local test host. Fixed a runtime MissingMethodException on UmbracoPipelineFilter under Umbraco 18 by switching the composer to the version-stable single-argument constructor plus property initializers. Fixed ImageSharp resize requests being served as original files and ensured transformed images use the package S3 cache instead of Umbraco's local default cache. Removed unsafe AWS ServiceURL placeholders from development samples and updated AWSSDK.S3. 1.3.0: Added configurable MediaBucketPrefix and CacheBucketPrefix support with normalized S3 keys, corrected public GetUrl behavior so local media URLs stay on the Umbraco media path unless BucketHostName is configured, added configurable cache-prefix handling, and expanded regression tests/documentation.</PackageReleaseNotes>
     <PackageIconUrl />
     <PackageIcon>Logo.jpg</PackageIcon>
     <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
@@ -31,7 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.22" />
-    <PackageReference Include="AWSSDK.S3" Version="4.0.18.1" />
+    <PackageReference Include="AWSSDK.S3" Version="4.0.101.4" />
     <PackageReference Include="SixLabors.ImageSharp.Web.Providers.AWS" Version="3.2.0" />
     <PackageReference Include="Umbraco.Cms.Web.Common" Version="[15.0.0,19.0.0)" />
   </ItemGroup>
