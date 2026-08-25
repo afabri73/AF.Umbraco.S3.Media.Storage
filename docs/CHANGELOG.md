@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fixed direct S3 delivery for original media URLs containing unrelated query parameters, such as Umbraco's cache-busting `v` parameter, while continuing to route recognized processing commands to ImageSharp.
 
 ## 1.4.1 - 2026-08-23
 - Updated README and Umbraco Marketplace contributor credits to acknowledge [suedeapple](https://github.com/suedeapple) for the Umbraco 18 compatibility, ImageSharp request-handling, and S3 cache integration fixes contributed in [PR #7](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/7).

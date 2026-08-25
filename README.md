@@ -64,7 +64,7 @@ Run unit tests:
 dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
 ```
 
-The unit test suite includes a regression for SVG uploads being accepted and invalid PNG content still being rejected by ImageSharp validation.
+The unit test suite includes regressions for ImageSharp request routing, SVG uploads being accepted, and invalid PNG content still being rejected by ImageSharp validation.
 
 ## Installation
 
