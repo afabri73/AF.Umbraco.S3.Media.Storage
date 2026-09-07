@@ -33,7 +33,7 @@ This coverage matters because the same rule is used in two paths:
 
 ### ImageSharp Delivery and Cache Regression
 
-The middleware regression suite verifies that media requests with recognized ImageSharp commands are passed to ImageSharp processing, including requests that also contain unrelated query parameters. Requests containing only unrelated parameters, such as Umbraco's cache-busting `v` parameter, remain eligible for direct S3 delivery. The S3 cache registration must replace Umbraco's local default cache so transformed images are written to the configured S3 cache.
+The middleware regression suite runs on .NET 9 and .NET 10. It verifies routing for recognized ImageSharp commands, including requests that also contain unrelated parameters, and direct S3 delivery when only parameters such as Umbraco's `v` value remain. Coverage includes dependency-injection activation, the legacy public and protected constructors, complete S3 responses, and commands declared by custom processors. The S3 middleware does not invoke `OnParseCommandsAsync` early; the callback remains exclusively managed by ImageSharp to avoid duplicate invocations. S3 cache registration must also replace Umbraco's default local cache so transformed images remain in S3.
 
 ## Package Build
 

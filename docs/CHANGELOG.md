@@ -1,7 +1,9 @@
 # Changelog
 
 ## Unreleased
-- Fixed direct S3 delivery for original media URLs containing unrelated query parameters, such as Umbraco's cache-busting `v` parameter, while continuing to route recognized processing commands to ImageSharp.
+- Fixed direct delivery of original media from S3 when URLs contain query parameters unrelated to ImageSharp, including Umbraco's cache-busting `v` parameter.
+- Preserved ImageSharp command filtering for the legacy public and protected constructors without breaking compatibility with their existing signatures.
+- Added regression coverage on .NET 9 and .NET 10 for dependency-injection activation, legacy constructors, complete S3 responses, and custom ImageSharp processors.
 
 ## 1.4.1 - 2026-08-23
 - Updated README and Umbraco Marketplace contributor credits to acknowledge [suedeapple](https://github.com/suedeapple) for the Umbraco 18 compatibility, ImageSharp request-handling, and S3 cache integration fixes contributed in [PR #7](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/7).

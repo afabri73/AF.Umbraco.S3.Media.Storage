@@ -24,7 +24,7 @@ which is not compatible with recent Umbraco versions.
 
 Thanks to community contributors:
 
-- [koty10](https://github.com/koty10) for the SVG upload-validation fix in [PR #3](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3).
+- [koty10](https://github.com/koty10) for the SVG upload-validation fix in [PR #3](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3) and the ImageSharp query-routing fix in [PR #9](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/9).
 - [proxicode](https://github.com/proxicode) for the configurable bucket-prefix contribution and related integration fixes in [PR #4](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/4).
 - [suedeapple](https://github.com/suedeapple) for Umbraco 18 compatibility and the ImageSharp request-handling and S3 cache integration fixes in [PR #7](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/7).
 
@@ -34,6 +34,12 @@ Thanks to community contributors:
 - Umbraco CMS: `15.x`, `16.x`, `17.x`, `18.x`
 - .NET: `9.0`, `10.0` (Umbraco 18.x requires `10.0`)
 - AWS SDK for .NET: `AWSSDK.S3` + `AWSSDK.Extensions.NETCore.Setup`
+
+## Unreleased
+
+The pending changes fix delivery of original media from S3 when the URL contains only query parameters unrelated to ImageSharp, such as Umbraco's `v` parameter. Recognized commands, including commands supplied by custom processors, continue to be routed to ImageSharp when combined with unrelated parameters. The behavior remains consistent for dependency-injection activation and legacy constructors.
+
+The `ImageSharpMiddlewareOptions.OnParseCommandsAsync` callback remains exclusively managed by the ImageSharp middleware, avoiding duplicate invocations and related side effects. URLs that rely on commands created only by this callback must include at least one registered command to be routed to ImageSharp.
 
 ## Current Release
 
@@ -64,7 +70,7 @@ Run unit tests:
 dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
 ```
 
-The unit test suite includes regressions for ImageSharp request routing, SVG uploads being accepted, and invalid PNG content still being rejected by ImageSharp validation.
+The suite includes regression coverage for ImageSharp routing, legacy constructors, complete S3 delivery, custom processors, SVG uploads, and rejection of invalid PNG content.
 
 ## Installation
 
