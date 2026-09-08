@@ -7,7 +7,7 @@ This package replaces the default media file system with an S3-backed implementa
 - S3-backed implementation of Umbraco `IFileSystem` for Media.
 - Middleware for direct media delivery from S3 under `/media`.
 - ImageSharp integration for dynamic thumbnails.
-- S3 cache for all media files (`cache/` mirror) plus ImageSharp transformed images.
+- Mirrored S3 cache for supported image files plus ImageSharp transformed images.
 - Localized server-side validation for malformed image uploads.
 - Startup S3 connectivity check that blocks app boot on connection failure.
 - Optional package-hosted smoke endpoints (opt-in via `AF_SMOKE_TESTS=1`).
@@ -25,17 +25,20 @@ which is not compatible with recent Umbraco versions.
 Thanks to community contributors:
 
 - [koty10](https://github.com/koty10) for the SVG upload-validation fix in [PR #3](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/3) and the ImageSharp query-routing fix in [PR #9](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/9).
+- [ElBart00](https://github.com/ElBart00) for reporting the asynchronous S3 exception-translation issue in [issue #10](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/issues/10).
 - [proxicode](https://github.com/proxicode) for the configurable bucket-prefix contribution and related integration fixes in [PR #4](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/4).
 - [suedeapple](https://github.com/suedeapple) for Umbraco 18 compatibility and the ImageSharp request-handling and S3 cache integration fixes in [PR #7](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/7).
 
 ## Compatibility
 
-- Current package version: `1.4.1`
+- Current package version: `1.4.2`
 - Umbraco CMS: `15.x`, `16.x`, `17.x`, `18.x`
 - .NET: `9.0`, `10.0` (Umbraco 18.x requires `10.0`)
 - AWS SDK for .NET: `AWSSDK.S3` + `AWSSDK.Extensions.NETCore.Setup`
 
-## Unreleased
+## Current Release
+
+`1.4.2` improves S3 media delivery and ImageSharp integration across Umbraco `15.x`-`18.x`:
 
 Missing S3 objects now follow the filesystem and HTTP not-found paths instead of surfacing asynchronous AWS failures as `AggregateException` and HTTP 500. Synchronous `IFileSystem` operations observe AWS task failures inside the existing exception-mapping boundary, including reads, metadata, listing, uploads, and deletes.
 
@@ -43,11 +46,13 @@ The ImageSharp source provider now checks the requested S3 object rather than th
 
 The package composer now runs explicitly after Umbraco's ImageSharp composer and inserts the S3 provider ahead of the default web-root provider. This prevents transformed media requests such as `?width=200` from returning HTTP 404 after Umbraco resets its provider collection during startup.
 
-The pending changes fix delivery of original media from S3 when the URL contains only query parameters unrelated to ImageSharp, such as Umbraco's `v` parameter. Recognized commands, including commands supplied by custom processors, continue to be routed to ImageSharp when combined with unrelated parameters. The behavior remains consistent for dependency-injection activation and legacy constructors.
+Original media is now delivered from S3 when the URL contains only query parameters unrelated to ImageSharp, such as Umbraco's `v` parameter. Recognized commands, including commands supplied by custom processors, continue to be routed to ImageSharp when combined with unrelated parameters. The behavior remains consistent for dependency-injection activation and legacy constructors.
 
 The `ImageSharpMiddlewareOptions.OnParseCommandsAsync` callback remains exclusively managed by the ImageSharp middleware, avoiding duplicate invocations and related side effects. URLs that rely on commands created only by this callback must include at least one registered command to be routed to ImageSharp.
 
-## Current Release
+Thanks to [koty10](https://github.com/koty10) for the query-routing contribution in [PR #9](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/9), and to [ElBart00](https://github.com/ElBart00) for reporting the asynchronous S3 failure mode in [issue #10](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/issues/10).
+
+## Previous Releases
 
 `1.4.1` updates contributor credits in the README and Umbraco Marketplace metadata.
 
@@ -63,6 +68,15 @@ Thanks to [proxicode](https://github.com/proxicode) for the configurable bucket-
 - Each host supports local overrides through `appsettings.Local.json`.
 - VS Code Run and Debug configurations and their build tasks are available for every compatibility host.
 
+| Host | HTTP | HTTPS |
+|---|---|---|
+| Umbraco 15 | `http://localhost:5015` | `https://localhost:44375` |
+| Umbraco 16 | `http://localhost:5016` | `https://localhost:44376` |
+| Umbraco 17 | `http://localhost:5017` | `https://localhost:44377` |
+| Umbraco 18 | `http://localhost:5018` | `https://localhost:44378` |
+
+Umbraco 18 uses `Umbraco:CMS:Imaging:HMACSecretKey`. The tracked `appsettings.json` contains an empty placeholder; set the real value only in the git-ignored `appsettings.Local.json`.
+
 ## Build and test
 
 Build the package:
@@ -75,6 +89,12 @@ Run unit tests:
 
 ```bash
 dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
+```
+
+Create the NuGet package:
+
+```bash
+dotnet pack src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj -c Release
 ```
 
 The suite includes regression coverage for S3 exception translation, awaited deletes, ImageSharp composer/provider ordering, missing-object 404 handling, metadata reuse, authorization failures, query routing, legacy constructors, complete S3 delivery, custom processors, SVG uploads, and rejection of invalid PNG content.
@@ -244,9 +264,9 @@ These endpoints are disabled by default.
 ## S3 object layout
 
 - Original media files: `media/...` by default, or `{MediaBucketPrefix}/...` when configured.
-- Mirrored media cache (all media types): `cache/...` by default, or `{CacheBucketPrefix}/...` when configured.
+- Mirrored media cache (supported images only): `cache/...` by default, or `{CacheBucketPrefix}/...` when configured.
 - ImageSharp transformed cache: `cache/...` by default, or `{CacheBucketPrefix}/...` when configured.
-- For ease of management, the `cache` folder replicates the `media` folder hierarchy, ensuring a one-to-one correspondence between each media folder and its cache folder.
+- For ease of management, cached images replicate the corresponding `media` folder hierarchy under the `cache` prefix.
 
 ## Localization for validation errors
 

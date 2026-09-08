@@ -1,9 +1,10 @@
 # Project Structure
-_Last updated: 2026-02-05_
+_Last updated: 2026-09-08_
 
 This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 
 ## Rules
+
 - Package source code lives under `src/AF.Umbraco.S3.Media.Storage`.
 - Unit tests live under `src/AF.Umbraco.S3.Media.Storage.Tests`.
 - `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, `src/Umbraco.Cms.17.x`, and `src/Umbraco.Cms.18.x` are test hosts used for compatibility validation.
@@ -11,6 +12,7 @@ This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 - XML documentation is expected across the package codebase (classes, methods, and properties).
 
 ## Main folders
+
 - `Composers/`: Umbraco composition and dependency registration.
 - `Core/`: Core S3 filesystem and stream handling logic.
 - `Exceptions/`: Custom package exceptions.
@@ -24,16 +26,26 @@ This document describes the package structure for `AF.Umbraco.S3.Media.Storage`.
 - `Services/`: Application services and orchestration logic.
 
 ## Key files
+
 - `src/AF.Umbraco.S3.Media.Storage/Core/AWSS3FileSystem.cs`: main S3 filesystem implementation and cache flow.
 - `src/AF.Umbraco.S3.Media.Storage/Core/ImageSharpValidationFileTypes.cs`: shared allow-list for formats that can be safely validated by ImageSharp.
+- `src/AF.Umbraco.S3.Media.Storage/Middlewares/AWSS3FileSystemMiddleware.cs`: direct S3 media delivery and ImageSharp command routing.
+- `src/AF.Umbraco.S3.Media.Storage/Providers/AWSS3FileSystemImageProvider.cs`: per-object ImageSharp source resolution and missing-object handling.
+- `src/AF.Umbraco.S3.Media.Storage/Resolvers/AWSS3MediaImageResolver.cs`: source stream resolution with provider-supplied metadata.
 - `src/AF.Umbraco.S3.Media.Storage.Tests/ImageSharpValidationFileTypesTests.cs`: regression tests for SVG bypass and invalid PNG rejection.
+- `src/AF.Umbraco.S3.Media.Storage.Tests/AWSS3FileSystemS3OperationTests.cs`: regression tests for AWS exception translation and awaited operations.
+- `src/AF.Umbraco.S3.Media.Storage.Tests/AWSS3FileSystemImageProviderTests.cs`: regression tests for provider ordering, metadata reuse, and missing-media pipeline behavior.
+- `src/AF.Umbraco.S3.Media.Storage.Tests/AWSS3FileSystemMiddlewareImageSharpTests.cs`: regression tests for original/transformed media query routing and constructor compatibility.
+- `.github/workflows/build-release-to-nuget.yaml`: package build, test, and manual NuGet artifact generation.
 
 ## Localization resources
+
 - Localized resource files for `AWSS3FileSystem` are centralized in `src/AF.Umbraco.S3.Media.Storage/Resources`.
 - Resource embedding is configured in `src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj` with explicit `EmbeddedResource` mappings to preserve runtime manifest names.
 
 <!-- DOCSYNC:START -->
 ## Implementation Notes (Code-Aligned)
+
 - User-facing alert messages are localized through `.resx` resources and must remain concise and non-technical.
 - Technical logs remain in English and include diagnostic context for troubleshooting (while avoiding noisy temporary culture probes).
 - Package logs use the `[AFUS3MS]` prefix for quick filtering in Umbraco logs.

@@ -1,15 +1,18 @@
 # Configuration Reference
 
 ## Required settings
+
 Configure the S3 provider settings used by the package in your Umbraco host configuration. No `Program.cs` changes are required.
 
 Typical configuration areas:
+
 - AWS access key / secret key
 - AWS region
 - Bucket name
 - Optional prefix / path settings
 
 ### Optional S3 object prefixes
+
 `Umbraco:Storage:AWSS3:Media:MediaBucketPrefix` controls the internal S3 object key prefix used for original media files. It defaults to `media`.
 
 `Umbraco:Storage:AWSS3:Media:CacheBucketPrefix` controls the internal S3 object key prefix used for mirrored media cache and ImageSharp transformed cache files. It defaults to `cache`.
@@ -19,13 +22,33 @@ Both values are normalized by trimming leading/trailing slashes, converting back
 These settings do not change the public Umbraco media URL path. Public URLs continue to use `Umbraco:CMS:Global:UmbracoMediaPath` (normally `/media`) unless `BucketHostName` is configured for CDN/S3-hosted public URLs.
 
 ## Operational recommendations
+
 - Use least-privilege IAM policies for the target bucket.
 - Keep production credentials out of source control.
 - Validate read/write/list permissions for media and cache keys.
 - For standard AWS S3, configure `AWS:Region` and credentials only. Do not configure `AWS:ServiceURL` with a placeholder because it overrides the regional endpoint and can cause slow DNS failures during the startup connectivity check.
 - Configure `AWS:ServiceURL` and `AWS:ForcePathStyle` only for S3-compatible endpoints such as MinIO. Keep these local endpoint settings in git-ignored `appsettings.Local.json`.
 
+### Umbraco 18 ImageSharp HMAC secret
+
+Umbraco 18 uses `Umbraco:CMS:Imaging:HMACSecretKey` to protect ImageSharp URLs. In the repository compatibility host, the tracked `appsettings.json` contains an empty placeholder and `appsettings.Development.json` does not override it. Configure the real secret only in git-ignored `appsettings.Local.json`:
+
+```json
+{
+  "Umbraco": {
+    "CMS": {
+      "Imaging": {
+        "HMACSecretKey": "YOUR_LOCAL_SECRET"
+      }
+    }
+  }
+}
+```
+
+Use a unique, high-entropy value for each environment and never commit it.
+
 ## Smoke endpoints (opt-in)
+
 Enable smoke endpoints for local validation and CI by setting:
 
 ```bash
@@ -33,6 +56,7 @@ AF_SMOKE_TESTS=1
 ```
 
 Endpoints:
+
 - `GET /smoke/health`
 - `POST /smoke/media-upload`
 

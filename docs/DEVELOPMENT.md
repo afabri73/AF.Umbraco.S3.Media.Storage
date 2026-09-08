@@ -1,48 +1,62 @@
 # Development Guide
 
 ## Scope
+
 This guide documents the package project `src/AF.Umbraco.S3.Media.Storage`.
 Test hosts are available under:
+
 - `src/Umbraco.Cms.15.x`
 - `src/Umbraco.Cms.16.x`
 - `src/Umbraco.Cms.17.x`
 - `src/Umbraco.Cms.18.x`
 
 ## Local build
+
 ```bash
 dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
 ```
 
 ## Unit tests
+
 ```bash
 dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
 ```
 
-The unit test project covers shared package rules that do not require a full Umbraco host. The regression suite verifies that SVG uploads are not validated by ImageSharp, while invalid PNG content still requires ImageSharp validation and is rejected.
+The unit test project targets .NET 9 and .NET 10. It covers shared package rules that do not require a full Umbraco host, including upload validation, S3 exception translation, awaited deletes, ImageSharp provider ordering, missing-media behavior, metadata reuse, query routing, dependency-injection activation, legacy constructors, complete S3 responses, and custom processors.
 
 ## Host validation quick checks
+
 - Hosts do not require `Program.cs` changes; the package composer wires everything automatically.
 - Run host smoke endpoints with `AF_SMOKE_TESTS=1` to validate boot and media upload path.
 - Smoke endpoints:
   - `GET /smoke/health`
   - `POST /smoke/media-upload`
-- Verified combinations:
-  - Umbraco 15 on `.NET 9`
-  - Umbraco 16 on `.NET 9`
+
+| Host | Framework | HTTP | HTTPS |
+|---|---|---|---|
+| Umbraco 15 | .NET 9 / .NET 10 | `http://localhost:5015` | `https://localhost:44375` |
+| Umbraco 16 | .NET 9 / .NET 10 | `http://localhost:5016` | `https://localhost:44376` |
+| Umbraco 17 | .NET 10 | `http://localhost:5017` | `https://localhost:44377` |
+| Umbraco 18 | .NET 10 | `http://localhost:5018` | `https://localhost:44378` |
 
 For standard AWS S3, leave `AWS:ServiceURL` unset. Set it only in `appsettings.Local.json` when validating MinIO or another S3-compatible endpoint.
 
+For Umbraco 18, also set `Umbraco:CMS:Imaging:HMACSecretKey` in git-ignored `appsettings.Local.json`. Keep the tracked placeholder empty.
+
 ## Caching behavior
+
 - Images are mirrored into cache using the original image stream.
 - Non-image files are not cached in this version.
 - Image eligibility uses MIME detection first, then extension fallback.
 - `bmp`, `tif`, and `tiff` are excluded from image cache.
 
 ## Debugging notes
+
 - If an upload fails during cache write, verify S3 credentials and bucket permissions.
 - If a file is uploaded but has no cache asset, ensure it is a supported image format.
 
 ## Localization behavior
+
 - User-facing alert messages are localized via `.resx` resources.
 - Resource files are stored under `src/AF.Umbraco.S3.Media.Storage/Resources`.
 - Neutral/default fallback is `AWSS3FileSystem.resx` (English content).
@@ -50,6 +64,7 @@ For standard AWS S3, leave `AWS:ServiceURL` unset. Set it only in `appsettings.L
 - `AF.Umbraco.S3.Media.Storage.csproj` keeps explicit `EmbeddedResource` mappings so manifest names remain `AF.Umbraco.S3.Media.Storage.Core.AWSS3FileSystem*` for runtime compatibility.
 
 ## Documentation standards
+
 - XML comments are required for classes, interfaces, methods, functions, and properties across the package codebase.
 - XML comments and technical documentation for new or updated areas must be written in English.
 - Prefer explicit XML comments over `<inheritdoc />` to keep implementation details self-contained for long-term maintenance.

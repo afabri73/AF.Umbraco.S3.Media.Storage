@@ -42,7 +42,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// <summary>
         /// Underlying ImageSharp S3 cache implementation.
         /// </summary>
-        private AWSS3StorageCache baseCache = null;
+        private AWSS3StorageCache _baseCache = null;
         /// <summary>
         /// Application configuration used to resolve AWS settings.
         /// </summary>
@@ -132,15 +132,14 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            // Collect configurations
             var fileSystemOptions = options.Get(name);
 
             ApplyCacheRetentionSettings(fileSystemOptions);
 
             AWSOptions awsOptions = _configuration.GetAWSOptions();
-            AWSS3StorageCacheOptions cacheOptions = getAWSS3StorageCacheOptions(fileSystemOptions, awsOptions);
+            AWSS3StorageCacheOptions cacheOptions = GetAWSS3StorageCacheOptions(fileSystemOptions, awsOptions);
 
-            baseCache = new AWSS3StorageCache(Microsoft.Extensions.Options.Options.Create(cacheOptions), _serviceProvider);
+            _baseCache = new AWSS3StorageCache(Microsoft.Extensions.Options.Options.Create(cacheOptions), _serviceProvider);
 
             options.OnChange(OptionsOnChange);
         }
@@ -154,7 +153,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         {
             string cacheAndKey = BuildCacheKey(key);
 
-            return await baseCache.GetAsync(cacheAndKey);
+            return await _baseCache.GetAsync(cacheAndKey);
         }
 
         /// <summary>
@@ -178,10 +177,10 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             if (name != _name) return;
 
             AWSOptions awsOptions = _configuration.GetAWSOptions();
-            var cacheOptions = getAWSS3StorageCacheOptions(options, awsOptions);
+            var cacheOptions = GetAWSS3StorageCacheOptions(options, awsOptions);
             ApplyCacheRetentionSettings(options);
 
-            baseCache = new AWSS3StorageCache(Microsoft.Extensions.Options.Options.Create(cacheOptions), _serviceProvider);
+            _baseCache = new AWSS3StorageCache(Microsoft.Extensions.Options.Options.Create(cacheOptions), _serviceProvider);
         }
 
         /// <summary>
@@ -191,7 +190,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         {
             try
             {
-                await baseCache.SetAsync(cacheAndKey, stream, metadata).ConfigureAwait(false);
+                await _baseCache.SetAsync(cacheAndKey, stream, metadata).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -216,9 +215,9 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// <summary>
         /// Resolves the AWS region used by the cache client.
         /// </summary>
-        private string getRegionName(AWSS3FileSystemOptions options)
+        private string GetRegionName(AWSS3FileSystemOptions options)
         {
-            // Get region -- start with fileSystemOptions; Doesn't exist? fallback to AWSOptions and then to S3Client
+            // Prefer the filesystem region, then the shared AWS options, and finally the client configuration.
             string region = options.Region;
             if (string.IsNullOrEmpty(region))
             {
@@ -242,15 +241,15 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         /// <param name="awss3FileSystemOptions">Named S3 filesystem options.</param>
         /// <param name="awsOptions">Resolved AWS SDK options.</param>
         /// <returns>The configured ImageSharp S3 cache options.</returns>
-        private AWSS3StorageCacheOptions getAWSS3StorageCacheOptions(AWSS3FileSystemOptions awss3FileSystemOptions, AWSOptions awsOptions)
+        private AWSS3StorageCacheOptions GetAWSS3StorageCacheOptions(AWSS3FileSystemOptions awss3FileSystemOptions, AWSOptions awsOptions)
         {
             AWSS3StorageCacheOptions cacheOptions = new()
             {
                 BucketName = awss3FileSystemOptions.BucketName,
-                Region = getRegionName(awss3FileSystemOptions)
+                Region = GetRegionName(awss3FileSystemOptions)
             };
 
-            // Respect custom S3-compatible endpoints (eg. MinIO) for thumbnail cache too.
+            // Respect custom S3-compatible endpoints (for example, MinIO) for the thumbnail cache.
             string endpoint = _configuration["AWS:ServiceURL"] ?? _configuration["AWS:ServiceUrl"];
             if (!string.IsNullOrWhiteSpace(endpoint))
             {

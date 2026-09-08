@@ -11,6 +11,7 @@ permissions:
 
 env:
   PROJECT_PATH: src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj
+  TEST_PROJECT_PATH: src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
   PACKAGE_OUTPUT_DIRECTORY: output
 
 jobs:
@@ -27,10 +28,13 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Restore
-        run: dotnet restore $PROJECT_PATH
+        run: dotnet restore $TEST_PROJECT_PATH
 
       - name: Build
         run: dotnet build $PROJECT_PATH -c Release --no-restore /p:GeneratePackageOnBuild=false
+
+      - name: Test
+        run: dotnet test $TEST_PROJECT_PATH -c Release --no-restore /p:GeneratePackageOnBuild=false
 
       - name: Pack (manual only, version from csproj)
         if: ${{ github.event_name == 'workflow_dispatch' }}

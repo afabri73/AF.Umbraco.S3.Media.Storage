@@ -561,16 +561,16 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Gets relative Path.
+        /// Converts a full media path or URL into a path relative to the configured media root.
         /// </summary>
-        /// <param name="fullPathOrUrl">The fullPathOrUrl.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <param name="fullPathOrUrl">The full media path or URL.</param>
+        /// <returns>The relative media path, or an empty string when the input is empty.</returns>
         public string GetRelativePath(string fullPathOrUrl)
         {
             if (string.IsNullOrEmpty(fullPathOrUrl))
                 return string.Empty;
 
-            //Strip protocol if not in hostname
+            // Strip the protocol when the configured bucket name is not itself a URL.
             if (!_bucketName.StartsWith("http"))
             {
                 if (fullPathOrUrl.StartsWith("https://"))
@@ -583,14 +583,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 }
             }
 
-            //Strip Hostname
-            //if (fullPathOrUrl.StartsWith(_bucketName, StringComparison.InvariantCultureIgnoreCase))
-            //{
-            //    fullPathOrUrl = fullPathOrUrl.Substring(Config.BucketHostName.Length);
-            //    fullPathOrUrl = fullPathOrUrl.TrimStart(Delimiter.ToCharArray());
-            //}
-
-            //Strip Virtual Path
+            // Strip the virtual media path.
             if (fullPathOrUrl.StartsWith(_rootPath, StringComparison.InvariantCultureIgnoreCase))
             {
                 fullPathOrUrl = fullPathOrUrl[_rootPath.Length..];

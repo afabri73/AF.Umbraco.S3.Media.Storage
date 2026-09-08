@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+
+## 1.4.2 - 2026-09-08
+
 - Added VS Code Run and Debug configurations and matching build tasks for the Umbraco 15.x and 16.x compatibility hosts.
 - Fixed transformed ImageSharp requests returning HTTP 404 by composing the S3 integration after Umbraco's ImageSharp setup and keeping the S3 provider ahead of the default web-root provider.
 - Added a direct compatible-range dependency on `Umbraco.Cms.Imaging.ImageSharp` and regression coverage for composer and provider ordering across the supported target frameworks.
@@ -11,6 +14,11 @@
 - Fixed direct delivery of original media from S3 when URLs contain query parameters unrelated to ImageSharp, including Umbraco's cache-busting `v` parameter.
 - Preserved ImageSharp command filtering for the legacy public and protected constructors without breaking compatibility with their existing signatures.
 - Added regression coverage on .NET 9 and .NET 10 for dependency-injection activation, legacy constructors, complete S3 responses, and custom ImageSharp processors.
+- Added an empty, version-safe `Umbraco:CMS:Imaging:HMACSecretKey` placeholder to the Umbraco 18 compatibility host while keeping the real local secret in git-ignored configuration.
+- Added package build and test validation to the release workflow before manual NuGet artifact generation.
+- Validated media delivery and ImageSharp transformations with the Umbraco 18 compatibility host and confirmed S3-backed transformed-image caching without package-level S3 or ImageSharp errors.
+- Thanks to [koty10](https://github.com/koty10) for the ImageSharp query-routing contribution in [PR #9](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/9).
+- Thanks to [ElBart00](https://github.com/ElBart00) for reporting the asynchronous S3 exception-translation issue in [issue #10](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/issues/10).
 
 ## 1.4.1 - 2026-08-23
 - Updated README and Umbraco Marketplace contributor credits to acknowledge [suedeapple](https://github.com/suedeapple) for the Umbraco 18 compatibility, ImageSharp request-handling, and S3 cache integration fixes contributed in [PR #7](https://github.com/afabri73/AF.Umbraco.S3.Media.Storage/pull/7).

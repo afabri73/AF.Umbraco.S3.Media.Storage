@@ -18,6 +18,14 @@ This manual describes the operational activities required to configure, test, re
 3. Store real local values only in `appsettings.Local.json`, which must stay out of version control.
 4. Verify `BucketName` and `Region`. Configure `ServiceURL` and `ForcePathStyle` only when using MinIO or another S3-compatible endpoint; standard AWS S3 must use regional endpoint resolution without a `ServiceURL` placeholder.
 5. Select the matching workspace Run and Debug entry; pre-launch build tasks are available for every compatibility host from Umbraco 15.x through 18.x.
+6. For the Umbraco 18 host, set `Umbraco:CMS:Imaging:HMACSecretKey` only in git-ignored `appsettings.Local.json`; leave the tracked placeholder empty.
+
+| Host | HTTP | HTTPS |
+|---|---|---|
+| Umbraco 15 | `http://localhost:5015` | `https://localhost:44375` |
+| Umbraco 16 | `http://localhost:5016` | `https://localhost:44376` |
+| Umbraco 17 | `http://localhost:5017` | `https://localhost:44377` |
+| Umbraco 18 | `http://localhost:5018` | `https://localhost:44378` |
 
 ## Build
 
@@ -31,7 +39,7 @@ dotnet build src/AF.Umbraco.S3.Media.Storage/AF.Umbraco.S3.Media.Storage.csproj 
 dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
 ```
 
-The unit tests include regressions for accepted SVG uploads and rejected invalid PNG content.
+The unit tests run on .NET 9 and .NET 10. They include regressions for accepted SVG uploads, rejected invalid PNG content, S3 exception translation, awaited deletes, ImageSharp provider ordering, missing-media handling, metadata reuse, query routing, dependency-injection activation, legacy constructors, complete S3 responses, and custom processors.
 
 ## Smoke Test
 
@@ -50,10 +58,11 @@ Verify:
 ## Release
 
 1. Run build and tests.
-2. Validate at least one Umbraco host with a real media upload.
+2. Validate the affected Umbraco hosts with a real media upload, direct media delivery, an ImageSharp transformation, and S3 cache inspection.
 3. Update version, release notes, and changelog.
 4. Generate the NuGet package.
-5. Publish the release and tag.
+5. Inspect the package metadata, dependency ranges, README, assemblies, XML documentation, and release notes.
+6. Publish and tag only after the generated package has passed validation.
 
 ## Troubleshooting
 
@@ -62,5 +71,6 @@ Verify:
 - S3 errors during startup: check credentials, bucket, region, and permissions.
 - Media uploaded but cache missing: verify image format, MIME detection, ImageSharp request commands, and write permissions on the `cache/` prefix.
 - Existing media loads but a transformed URL such as `?width=200` returns HTTP 404: verify that the installed package composes after Umbraco's ImageSharp setup and that `AWSS3FileSystemImageProvider` is the first registered `IImageProvider`.
+- Existing media with `?v=...` is not delivered: verify that the installed package strips unregistered ImageSharp commands before deciding whether the S3 middleware should serve the original object.
 - Missing media returns HTTP 500: verify that the installed package includes per-object ImageSharp source checks and synchronous S3 exception translation; the regression suite must pass `ImageSharpPipeline_MissingObject_InvokesNextMiddlewareWith404`.
 - Startup waits before failing: remove any placeholder `AWS:ServiceURL`; the setting overrides the regional AWS endpoint and is intended only for explicit S3-compatible endpoints.

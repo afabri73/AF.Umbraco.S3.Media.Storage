@@ -24,12 +24,13 @@ Compatibility validation hosts:
 2. `AddAWSS3MediaFileSystem()` is invoked by the composer (no `Program.cs` changes required).
 3. `AWSS3StartupConnectivityHostedService` validates S3 connectivity and blocks boot on failure.
 4. `UseAWSS3MediaFileSystem()` is applied by the composer via pipeline filters.
-5. Media write/read operations flow through `AWSS3FileSystem`.
-6. ImageSharp requests (`?width=...`) use:
+5. Original media requests with no recognized ImageSharp commands are served directly from S3, including URLs that contain only unrelated parameters such as Umbraco's cache-busting `v` value.
+6. Media write/read operations flow through `AWSS3FileSystem`.
+7. ImageSharp requests (`?width=...`) use:
    - `AWSS3FileSystemImageProvider`, registered ahead of Umbraco's catch-all web-root provider, for a per-object metadata lookup and source resolution; missing keys continue through the pipeline for 404 handling.
    - `AWSS3MediaImageResolver` to reuse the provider metadata response and open the source stream without duplicate HEAD requests.
    - `AWSS3FileSystemImageCache` for cache persistence in S3.
-7. Cache key grouping is produced by `AWSS3ScopedCacheHash`.
+8. Cache key grouping is produced by `AWSS3ScopedCacheHash`.
 
 ## Components
 
@@ -76,6 +77,7 @@ Responsibilities:
 Responsibilities:
 
 - Serve media responses from S3 with range and conditional support.
+- Strip unregistered ImageSharp commands before routing, so unrelated query parameters do not prevent direct S3 delivery and registered custom commands still reach ImageSharp.
 - Convert malformed raster upload failures into API-friendly localized `400` responses.
 - Reuse the shared ImageSharp validation format rule so middleware and filesystem behavior stay consistent.
 

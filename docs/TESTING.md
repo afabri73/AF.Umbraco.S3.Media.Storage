@@ -78,3 +78,12 @@ The solution includes these hosts:
 Use these hosts to validate Umbraco startup, media upload, `/media` reads, ImageSharp resize requests, S3 cache behavior, and localized messages. For standard AWS S3, also verify startup with `AWS:ServiceURL` unset.
 
 The workspace Run and Debug configuration includes Kestrel and IIS Express entries, with matching pre-launch build tasks, for every compatibility host from Umbraco 15.x through 18.x.
+
+| Host | HTTP | HTTPS |
+|---|---|---|
+| Umbraco 15 | `http://localhost:5015` | `https://localhost:44375` |
+| Umbraco 16 | `http://localhost:5016` | `https://localhost:44376` |
+| Umbraco 17 | `http://localhost:5017` | `https://localhost:44377` |
+| Umbraco 18 | `http://localhost:5018` | `https://localhost:44378` |
+
+For Umbraco 18, set a local `Umbraco:CMS:Imaging:HMACSecretKey` in git-ignored `appsettings.Local.json` before exercising ImageSharp URLs. Release validation must cover an original URL with only `?v=...`, a transformed URL such as `?width=200&v=...`, a missing object, and confirmation that transformed output is written to the configured S3 cache.

@@ -11,6 +11,10 @@
         "Url": "https://github.com/koty10"
       },
       {
+        "Name": "ElBart00",
+        "Url": "https://github.com/ElBart00"
+      },
+      {
         "Name": "proxicode",
         "Url": "https://github.com/proxicode"
       },
@@ -21,7 +25,7 @@
     ]
   },
   "Category": "Developer Tools",
-  "Description": "AWS S3 media storage for Umbraco 15-18 on .NET 9 and .NET 10. Provides an S3-backed IFileSystem, direct media delivery, and S3 caching for ImageSharp transforms. Supports configurable media and cache prefixes, localized upload validation, optional cache cleanup, startup connectivity checks, and opt-in smoke endpoints. Auto-composed; no Program.cs changes required.",
+  "Description": "AWS S3 media storage for Umbraco 15-18 on .NET 9 and .NET 10. Provides an S3-backed IFileSystem, direct media delivery, and S3 caching for ImageSharp transforms. Supports configurable media and cache prefixes, localized upload validation, optional cache cleanup, startup connectivity checks, and opt-in smoke endpoints. Auto-composed; no Program.cs changes required.\n\nRelease 1.4.2 highlights:\n- Delivers original S3 media when URLs contain unrelated query parameters such as Umbraco's cache-busting v parameter.\n- Maps asynchronous AWS failures correctly and returns not-found responses for missing media instead of HTTP 500.\n- Corrects ImageSharp provider ordering, reuses S3 metadata, and keeps transformed-image caching in S3.\n- Adds .NET 9 and .NET 10 regression coverage for delivery, exception handling, provider ordering, and custom processors.",
   "DocumentationUrl": "https://github.com/afabri73/AF.Umbraco.S3.Media.Storage?tab=readme-ov-file#readme-ov-file",
   "LicenseTypes": [
     "Free"
