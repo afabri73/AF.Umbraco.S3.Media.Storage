@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Imaging.ImageSharp;
 using Umbraco.Cms.Web.Common.ApplicationBuilder;
 
 namespace AF.Umbraco.S3.Media.Storage.Composers
@@ -17,6 +19,7 @@ namespace AF.Umbraco.S3.Media.Storage.Composers
     /// <summary>
     /// Composes package services and middleware required for AWS S3 integration in Umbraco.
     /// </summary>
+    [ComposeAfter(typeof(ImageSharpComposer))]
     public class AWSS3Composer : IComposer
     {
         /// <summary>

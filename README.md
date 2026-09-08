@@ -37,6 +37,12 @@ Thanks to community contributors:
 
 ## Unreleased
 
+Missing S3 objects now follow the filesystem and HTTP not-found paths instead of surfacing asynchronous AWS failures as `AggregateException` and HTTP 500. Synchronous `IFileSystem` operations observe AWS task failures inside the existing exception-mapping boundary, including reads, metadata, listing, uploads, and deletes.
+
+The ImageSharp source provider now checks the requested S3 object rather than the bucket. A missing key is passed to the remaining middleware pipeline for HTTP 404 handling, while authorization failures remain visible. Successful metadata is reused by the resolver, avoiding the previous bucket check and duplicate metadata requests.
+
+The package composer now runs explicitly after Umbraco's ImageSharp composer and inserts the S3 provider ahead of the default web-root provider. This prevents transformed media requests such as `?width=200` from returning HTTP 404 after Umbraco resets its provider collection during startup.
+
 The pending changes fix delivery of original media from S3 when the URL contains only query parameters unrelated to ImageSharp, such as Umbraco's `v` parameter. Recognized commands, including commands supplied by custom processors, continue to be routed to ImageSharp when combined with unrelated parameters. The behavior remains consistent for dependency-injection activation and legacy constructors.
 
 The `ImageSharpMiddlewareOptions.OnParseCommandsAsync` callback remains exclusively managed by the ImageSharp middleware, avoiding duplicate invocations and related side effects. URLs that rely on commands created only by this callback must include at least one registered command to be routed to ImageSharp.
@@ -55,6 +61,7 @@ Thanks to [proxicode](https://github.com/proxicode) for the configurable bucket-
 
 - Local compatibility hosts are included under `src/Umbraco.Cms.15.x`, `src/Umbraco.Cms.16.x`, `src/Umbraco.Cms.17.x`, and `src/Umbraco.Cms.18.x`.
 - Each host supports local overrides through `appsettings.Local.json`.
+- VS Code Run and Debug configurations and their build tasks are available for every compatibility host.
 
 ## Build and test
 
@@ -70,7 +77,7 @@ Run unit tests:
 dotnet test src/AF.Umbraco.S3.Media.Storage.Tests/AF.Umbraco.S3.Media.Storage.Tests.csproj
 ```
 
-The suite includes regression coverage for ImageSharp routing, legacy constructors, complete S3 delivery, custom processors, SVG uploads, and rejection of invalid PNG content.
+The suite includes regression coverage for S3 exception translation, awaited deletes, ImageSharp composer/provider ordering, missing-object 404 handling, metadata reuse, authorization failures, query routing, legacy constructors, complete S3 delivery, custom processors, SVG uploads, and rejection of invalid PNG content.
 
 ## Installation
 

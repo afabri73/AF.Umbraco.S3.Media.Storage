@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Resources;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.Security;
 
@@ -223,10 +224,11 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Gets the name used by this component.
+        /// Determines whether an S3 directory prefix contains at least one object.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns><see langword="true" /> when the prefix contains an object; otherwise, <see langword="false" />.</returns>
+        /// <exception cref="FileNotFoundException">S3 reports that the bucket or prefix does not exist.</exception>
         public bool DirectoryExists(string path)
         {
             var request = new ListObjectsRequest
@@ -236,7 +238,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 MaxKeys = 1
             };
 
-            var response = Execute(client => client.ListObjectsAsync(request)).Result;
+            var response = ExecuteS3Task(client => client.ListObjectsAsync(request));
             return response.S3Objects.Count > 0;
         }
 
@@ -307,7 +309,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
 
             try
             {
-                Execute(client => client.PutObjectAsync(request)).GetAwaiter().GetResult();
+                ExecuteS3Task(client => client.PutObjectAsync(request));
             }
             catch (Exception ex)
             {
@@ -406,7 +408,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
 
             try
             {
-                Execute(client => client.PutObjectAsync(request)).GetAwaiter().GetResult();
+                ExecuteS3Task(client => client.PutObjectAsync(request));
             }
             catch (Exception ex)
             {
@@ -471,10 +473,11 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Opens file.
+        /// Opens the specified S3 object as a seekable in-memory stream.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns>A readable stream positioned at the beginning of the object content.</returns>
+        /// <exception cref="FileNotFoundException">S3 reports that the object does not exist.</exception>
         public Stream OpenFile(string path)
         {
 
@@ -485,7 +488,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
             };
 
             MemoryStream stream;
-            using (var response = Execute(client => client.GetObjectAsync(request)).Result)
+            using (var response = ExecuteS3Task(client => client.GetObjectAsync(request)))
             {
                 stream = new MemoryStream();
                 response.ResponseStream.CopyTo(stream);
@@ -498,9 +501,10 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Deletes file.
+        /// Deletes the specified S3 object and its associated cache entries.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <exception cref="AWSS3UserAlertException">The object or cache cleanup could not be completed.</exception>
         public void DeleteFile(string path)
         {
             try
@@ -511,7 +515,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                     BucketName = _bucketName,
                     Key = resolvedPath
                 };
-                Execute(client => client.DeleteObjectAsync(request));
+                ExecuteS3Task(client => client.DeleteObjectAsync(request));
 
                 DeleteMirroredCacheObjectBySourcePath(resolvedPath);
                 DeleteImageCacheBySourcePath(resolvedPath);
@@ -523,10 +527,11 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Gets the name used by this component.
+        /// Determines whether the specified S3 object exists.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns><see langword="true" /> when the object exists; otherwise, <see langword="false" />.</returns>
+        /// <remarks>Authorization failures are propagated and are not treated as missing objects.</remarks>
         public bool FileExists(string path)
         {
             var request = new GetObjectMetadataRequest
@@ -537,7 +542,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
 
             try
             {
-                var response = Execute(client => client.GetObjectMetadataAsync(request)).GetAwaiter().GetResult();
+                var response = ExecuteS3Task(client => client.GetObjectMetadataAsync(request));
                 return true;
             }
             catch (FileNotFoundException)
@@ -631,10 +636,11 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
-        /// Gets last Modified.
+        /// Gets the last-modified timestamp reported by S3 for the specified object.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns>The last-modified timestamp.</returns>
+        /// <exception cref="FileNotFoundException">S3 reports that the object does not exist.</exception>
         public DateTimeOffset GetLastModified(string path)
         {
             var request = new GetObjectMetadataRequest
@@ -643,27 +649,28 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 Key = ResolveBucketPath(path)
             };
 
-            var response = Execute(client => client.GetObjectMetadataAsync(request)).Result;
+            var response = ExecuteS3Task(client => client.GetObjectMetadataAsync(request));
             return new DateTimeOffset(response.LastModified ?? DateTime.UtcNow);
         }
 
         /// <summary>
-        /// Gets created.
+        /// Gets the best available creation timestamp for the specified object.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns>The S3 last-modified timestamp because S3 does not expose an object creation timestamp.</returns>
+        /// <exception cref="FileNotFoundException">S3 reports that the object does not exist.</exception>
         public DateTimeOffset GetCreated(string path)
         {
-            //It Is Not Possible To Get Object Created Date - Bucket Versioning Required
-            //Return Last Modified Date Instead
+            // S3 does not expose object creation time, so use the last-modified timestamp.
             return GetLastModified(path);
         }
 
         /// <summary>
-        /// Gets size.
+        /// Gets the content length reported by S3 for the specified object.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns>The object size in bytes.</returns>
+        /// <exception cref="FileNotFoundException">S3 reports that the object does not exist.</exception>
         public long GetSize(string path)
         {
             var request = new GetObjectMetadataRequest
@@ -672,16 +679,18 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 Key = ResolveBucketPath(path)
             };
 
-            var response = Execute(client => client.GetObjectMetadataAsync(request)).Result;
+            var response = ExecuteS3Task(client => client.GetObjectMetadataAsync(request));
             return response.ContentLength;
         }
 
         /// <summary>
-        /// Gets the name used by this component.
+        /// Executes an S3 operation and applies the filesystem exception mapping.
         /// </summary>
         /// <typeparam name="T">The request result type.</typeparam>
         /// <param name="request">The request delegate to execute.</param>
         /// <returns>The result returned by the request delegate.</returns>
+        /// <exception cref="FileNotFoundException">S3 returns HTTP 404.</exception>
+        /// <exception cref="UnauthorizedAccessException">S3 returns HTTP 401.</exception>
         protected virtual T Execute<T>(Func<IAmazonS3, T> request)
         {
             try
@@ -701,6 +710,19 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         }
 
         /// <summary>
+        /// Executes an asynchronous AWS SDK operation through the synchronous filesystem boundary.
+        /// </summary>
+        /// <typeparam name="T">The AWS response type.</typeparam>
+        /// <param name="request">The asynchronous S3 request to execute.</param>
+        /// <returns>The completed AWS response.</returns>
+        /// <remarks>
+        /// The Umbraco filesystem contract is synchronous. Waiting inside the <see cref="Execute{T}(Func{IAmazonS3, T})" />
+        /// delegate ensures that AWS exceptions are translated consistently without changing the existing protected API.
+        /// </remarks>
+        private T ExecuteS3Task<T>(Func<IAmazonS3, Task<T>> request) =>
+            Execute(client => request(client).ConfigureAwait(false).GetAwaiter().GetResult());
+
+        /// <summary>
         /// Gets the name used by this component.
         /// </summary>
         /// <param name="request">The initial list request.</param>
@@ -708,13 +730,13 @@ namespace AF.Umbraco.S3.Media.Storage.Core
         protected virtual IEnumerable<ListObjectsResponse> ExecuteWithContinuation(ListObjectsRequest request)
         {
 
-            var response = Execute(client => client.ListObjectsAsync(request)).Result;
+            var response = ExecuteS3Task(client => client.ListObjectsAsync(request));
             yield return response;
 
             while (response.IsTruncated == true)
             {
                 request.Marker = response.NextMarker;
-                response = Execute(client => client.ListObjectsAsync(request)).Result;
+                response = ExecuteS3Task(client => client.ListObjectsAsync(request));
                 yield return response;
             }
         }
@@ -748,7 +770,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                     Objects = [.. batch]
                 };
 
-                Execute(client => client.DeleteObjectsAsync(deleteRequest)).GetAwaiter().GetResult();
+                ExecuteS3Task(client => client.DeleteObjectsAsync(deleteRequest));
             }
         }
 
@@ -800,7 +822,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 ServerSideEncryptionMethod = _serverSideEncryptionMethod
             };
 
-            Execute(client => client.PutObjectAsync(cacheRequest)).GetAwaiter().GetResult();
+            ExecuteS3Task(client => client.PutObjectAsync(cacheRequest));
         }
 
         /// <summary>
@@ -818,7 +840,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 ServerSideEncryptionMethod = _serverSideEncryptionMethod
             };
 
-            Execute(client => client.PutObjectAsync(cacheRequest)).GetAwaiter().GetResult();
+            ExecuteS3Task(client => client.PutObjectAsync(cacheRequest));
         }
 
         /// <summary>
@@ -833,7 +855,7 @@ namespace AF.Umbraco.S3.Media.Storage.Core
                 Key = cacheKey
             };
 
-            Execute(client => client.DeleteObjectAsync(request)).GetAwaiter().GetResult();
+            ExecuteS3Task(client => client.DeleteObjectAsync(request));
         }
 
         /// <summary>

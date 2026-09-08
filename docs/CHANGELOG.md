@@ -1,6 +1,13 @@
 # Changelog
 
 ## Unreleased
+- Added VS Code Run and Debug configurations and matching build tasks for the Umbraco 15.x and 16.x compatibility hosts.
+- Fixed transformed ImageSharp requests returning HTTP 404 by composing the S3 integration after Umbraco's ImageSharp setup and keeping the S3 provider ahead of the default web-root provider.
+- Added a direct compatible-range dependency on `Umbraco.Cms.Imaging.ImageSharp` and regression coverage for composer and provider ordering across the supported target frameworks.
+- Fixed asynchronous AWS SDK failures bypassing the filesystem exception mapping, which caused missing S3 media to surface as `AggregateException` instead of `FileNotFoundException`.
+- Fixed missing ImageSharp source objects returning HTTP 500 by checking the requested S3 key and passing unresolved requests to the remaining middleware pipeline for HTTP 404 handling.
+- Reused the ImageSharp provider's S3 metadata response in the resolver, removing the per-request bucket check and two duplicate metadata reads.
+- Added .NET 9 and .NET 10 regression coverage for filesystem exception translation, awaited deletes, authorization failures, metadata reuse, and missing-image pipeline behavior.
 - Fixed direct delivery of original media from S3 when URLs contain query parameters unrelated to ImageSharp, including Umbraco's cache-busting `v` parameter.
 - Preserved ImageSharp command filtering for the legacy public and protected constructors without breaking compatibility with their existing signatures.
 - Added regression coverage on .NET 9 and .NET 10 for dependency-injection activation, legacy constructors, complete S3 responses, and custom ImageSharp processors.

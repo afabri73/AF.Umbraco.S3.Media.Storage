@@ -2,8 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using SixLabors.ImageSharp.Web.Caching;
-using SixLabors.ImageSharp.Web.Providers;
+using SixLabors.ImageSharp.Web.DependencyInjection;
 using System;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Infrastructure.DependencyInjection;
@@ -38,16 +37,27 @@ namespace AF.Umbraco.S3.Media.Storage.Extensions
 
             builder.Services.TryAddSingleton<AWSS3FileSystemMiddleware>();
 
-            // ImageSharp image provider/cache
-            builder.Services.Insert(0, ServiceDescriptor.Singleton<IImageProvider, AWSS3FileSystemImageProvider>());
-            builder.Services.Replace(ServiceDescriptor.Singleton<IImageCache, AWSS3FileSystemImageCache>());
-            builder.Services.Replace(ServiceDescriptor.Singleton<ICacheHash, AWSS3ScopedCacheHash>());
+            ConfigureImageSharp(builder.Services);
 
             builder.SetMediaFileSystem(provider => provider.GetRequiredService<IAWSS3FileSystemProvider>()
                 .GetFileSystem(AWSS3FileSystemOptions.MediaFileSystemName));
 
             return builder;
         }
+
+        internal static void ConfigureImageSharp(IServiceCollection services)
+        {
+            new AWSS3ImageSharpBuilder(services)
+                .InsertProvider<AWSS3FileSystemImageProvider>(0)
+                .SetCache<AWSS3FileSystemImageCache>()
+                .SetCacheHash<AWSS3ScopedCacheHash>();
+        }
+
+        private sealed class AWSS3ImageSharpBuilder(IServiceCollection services) : IImageSharpBuilder
+        {
+            public IServiceCollection Services { get; } = services;
+        }
+
         /// <summary>
         /// Registers a <see cref="IAWSS3FileSystem" /> and it's dependencies configured for media.
         /// </summary>

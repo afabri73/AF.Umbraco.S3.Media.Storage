@@ -1,5 +1,5 @@
 using Amazon.S3;
-using Amazon.S3.Util;
+using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Options;
@@ -7,6 +7,7 @@ using SixLabors.ImageSharp.Web;
 using SixLabors.ImageSharp.Web.Providers;
 using SixLabors.ImageSharp.Web.Resolvers;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Hosting;
 
@@ -19,13 +20,13 @@ namespace AF.Umbraco.S3.Media.Storage.Providers
     public class AWSS3FileSystemImageProvider : IImageProvider
     {
         /// <summary>
-        /// Gets the name used by this component.
+        /// Gets the named S3 filesystem configuration used by this provider.
         /// </summary>
         private readonly string _name;
         /// <summary>
         /// Gets the bucket name used by this component.
         /// </summary>
-        private readonly string _bucketName;
+        private string _bucketName;
         /// <summary>
         /// Gets the file system provider used by this component.
         /// </summary>
@@ -96,10 +97,10 @@ namespace AF.Umbraco.S3.Media.Storage.Providers
         }
 
         /// <summary>
-        /// Gets the name used by this component.
+        /// Determines whether the request targets a supported image extension.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns><see langword="true" /> when the request contains a supported extension; otherwise, <see langword="false" />.</returns>
         public bool IsValidRequest(HttpContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -108,10 +109,11 @@ namespace AF.Umbraco.S3.Media.Storage.Providers
         }
 
         /// <summary>
-        /// Gets the name used by this component.
+        /// Resolves an existing S3 object for ImageSharp processing.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <returns>The result of the operation.</returns>
+        /// <returns>A resolver for an existing object, or <see langword="null" /> when S3 returns HTTP 404.</returns>
+        /// <remarks>Authorization failures are propagated so IAM configuration errors remain observable.</remarks>
         public Task<IImageResolver> GetAsync(HttpContext context)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -120,17 +122,33 @@ namespace AF.Umbraco.S3.Media.Storage.Providers
         }
 
         /// <summary>
-        /// Gets resolver asynchronously.
+        /// Performs the S3 metadata lookup and creates a resolver that reuses the response.
         /// </summary>
         private async Task<IImageResolver> GetResolverAsync(HttpContext context)
         {
-            var fileSystemProvider = _fileSystemProvider.GetFileSystem(_name);
-            var path = context.Request.Path.Value ?? string.Empty;
+            IAWSS3FileSystem fileSystem = _fileSystemProvider.GetFileSystem(_name);
+            string path = context.Request.Path.Value ?? string.Empty;
+            var request = new GetObjectMetadataRequest
+            {
+                BucketName = _bucketName,
+                Key = fileSystem.ResolveBucketPath(path)
+            };
 
-            if (await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, _bucketName))
-                return new AWSS3MediaImageResolver(fileSystemProvider, path);
+            try
+            {
+                GetObjectMetadataResponse response = await _s3Client
+                    .GetObjectMetadataAsync(request, context.RequestAborted)
+                    .ConfigureAwait(false);
+                var metadata = new ImageMetadata(
+                    new DateTimeOffset(response.LastModified ?? DateTime.UtcNow).UtcDateTime,
+                    response.ContentLength);
 
-            return null;
+                return new AWSS3MediaImageResolver(fileSystem, path, metadata);
+            }
+            catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -165,6 +183,7 @@ namespace AF.Umbraco.S3.Media.Storage.Providers
             if (!string.Equals(name, _name, StringComparison.Ordinal)) return;
 
             _rootPath = hostingEnvironment.ToAbsolute(options.VirtualPath);
+            _bucketName = options.BucketName;
         }
     }
 }

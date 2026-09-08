@@ -2,6 +2,34 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Umbraco 15.x (Kestrel)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Umbraco.Cms.15.x/Umbraco.Cms.15.x.csproj",
+      "preLaunchTask": "build Umbraco.Cms.15.x"
+    },
+    {
+      "name": "Umbraco 15.x (IIS Express)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Umbraco.Cms.15.x/Umbraco.Cms.15.x.csproj",
+      "preLaunchTask": "build Umbraco.Cms.15.x"
+    },
+    {
+      "name": "Umbraco 16.x (Kestrel)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Umbraco.Cms.16.x/Umbraco.Cms.16.x.csproj",
+      "preLaunchTask": "build Umbraco.Cms.16.x"
+    },
+    {
+      "name": "Umbraco 16.x (IIS Express)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Umbraco.Cms.16.x/Umbraco.Cms.16.x.csproj",
+      "preLaunchTask": "build Umbraco.Cms.16.x"
+    },
+    {
       "name": "Umbraco 17.x (Kestrel)",
       "type": "dotnet",
       "request": "launch",

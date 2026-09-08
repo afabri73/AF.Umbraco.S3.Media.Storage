@@ -17,6 +17,7 @@ This manual describes the operational activities required to configure, test, re
 2. Configure one host under `src/Umbraco.Cms.*.x`.
 3. Store real local values only in `appsettings.Local.json`, which must stay out of version control.
 4. Verify `BucketName` and `Region`. Configure `ServiceURL` and `ForcePathStyle` only when using MinIO or another S3-compatible endpoint; standard AWS S3 must use regional endpoint resolution without a `ServiceURL` placeholder.
+5. Select the matching workspace Run and Debug entry; pre-launch build tasks are available for every compatibility host from Umbraco 15.x through 18.x.
 
 ## Build
 
@@ -60,4 +61,6 @@ Verify:
 - Corrupted PNG/JPG files accepted: verify the write path goes through ImageSharp validation and unit tests are executed.
 - S3 errors during startup: check credentials, bucket, region, and permissions.
 - Media uploaded but cache missing: verify image format, MIME detection, ImageSharp request commands, and write permissions on the `cache/` prefix.
+- Existing media loads but a transformed URL such as `?width=200` returns HTTP 404: verify that the installed package composes after Umbraco's ImageSharp setup and that `AWSS3FileSystemImageProvider` is the first registered `IImageProvider`.
+- Missing media returns HTTP 500: verify that the installed package includes per-object ImageSharp source checks and synchronous S3 exception translation; the regression suite must pass `ImageSharpPipeline_MissingObject_InvokesNextMiddlewareWith404`.
 - Startup waits before failing: remove any placeholder `AWS:ServiceURL`; the setting overrides the regional AWS endpoint and is intended only for explicit S3-compatible endpoints.

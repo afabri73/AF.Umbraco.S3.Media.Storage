@@ -12,27 +12,27 @@ namespace AF.Umbraco.S3.Media.Storage.Resolvers
     /// </summary>
     /// <param name="fileSystem">The media file system.</param>
     /// <param name="path">The media path.</param>
-    internal sealed class AWSS3MediaImageResolver(IAWSS3FileSystem fileSystem, string path) : IImageResolver
+    /// <param name="metadata">The metadata retrieved while resolving the S3 object.</param>
+    internal sealed class AWSS3MediaImageResolver(IAWSS3FileSystem fileSystem, string path, ImageMetadata metadata) : IImageResolver
     {
         /// <summary>
-        /// Holds the media filesystem used to read metadata and content streams.
+        /// Holds the media filesystem used to open content streams.
         /// </summary>
         private readonly IAWSS3FileSystem _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         /// <summary>
         /// Holds the media path resolved for this image request.
         /// </summary>
         private readonly string _path = path ?? throw new ArgumentNullException(nameof(path));
+        /// <summary>
+        /// Holds the metadata retrieved by the image provider so the resolver does not repeat S3 metadata requests.
+        /// </summary>
+        private readonly ImageMetadata _metadata = metadata;
 
         /// <summary>
-        /// Gets image metadata for the requested media path.
+        /// Gets the image metadata captured by the provider during object resolution.
         /// </summary>
         /// <returns>A task containing the image metadata.</returns>
-        public Task<ImageMetadata> GetMetaDataAsync()
-        {
-            var lastWriteTimeUtc = _fileSystem.GetLastModified(_path).UtcDateTime;
-            var contentLength = _fileSystem.GetSize(_path);
-            return Task.FromResult(new ImageMetadata(lastWriteTimeUtc, contentLength));
-        }
+        public Task<ImageMetadata> GetMetaDataAsync() => Task.FromResult(_metadata);
 
         /// <summary>
         /// Opens a readable stream for the requested media path.

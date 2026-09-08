@@ -2,6 +2,48 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "build Umbraco.Cms.15.x",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/Umbraco.Cms.15.x/Umbraco.Cms.15.x.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:Summary;ErrorsOnly",
+        "/v:minimal",
+        "/bl:${workspaceFolder}/msbuild.binlog",
+        "/flp:logfile=${workspaceFolder}/msbuild.log;verbosity=diagnostic"
+      ],
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/usr/local/share/dotnet:${env:PATH}"
+        }
+      }
+    },
+    {
+      "label": "build Umbraco.Cms.16.x",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/Umbraco.Cms.16.x/Umbraco.Cms.16.x.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:Summary;ErrorsOnly",
+        "/v:minimal",
+        "/bl:${workspaceFolder}/msbuild.binlog",
+        "/flp:logfile=${workspaceFolder}/msbuild.log;verbosity=diagnostic"
+      ],
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/usr/local/share/dotnet:${env:PATH}"
+        }
+      }
+    },
+    {
       "label": "build Umbraco.Cms.17.x",
       "type": "process",
       "command": "dotnet",

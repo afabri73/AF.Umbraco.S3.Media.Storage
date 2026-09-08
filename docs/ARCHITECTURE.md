@@ -20,13 +20,14 @@ Compatibility validation hosts:
 
 ## High-level flow
 
-1. Umbraco bootstraps and `AWSS3Composer` registers services automatically.
+1. Umbraco bootstraps and `AWSS3Composer` registers services automatically after Umbraco's `ImageSharpComposer` has configured the default image pipeline.
 2. `AddAWSS3MediaFileSystem()` is invoked by the composer (no `Program.cs` changes required).
 3. `AWSS3StartupConnectivityHostedService` validates S3 connectivity and blocks boot on failure.
 4. `UseAWSS3MediaFileSystem()` is applied by the composer via pipeline filters.
 5. Media write/read operations flow through `AWSS3FileSystem`.
 6. ImageSharp requests (`?width=...`) use:
-   - `AWSS3FileSystemImageProvider` for source resolution.
+   - `AWSS3FileSystemImageProvider`, registered ahead of Umbraco's catch-all web-root provider, for a per-object metadata lookup and source resolution; missing keys continue through the pipeline for 404 handling.
+   - `AWSS3MediaImageResolver` to reuse the provider metadata response and open the source stream without duplicate HEAD requests.
    - `AWSS3FileSystemImageCache` for cache persistence in S3.
 7. Cache key grouping is produced by `AWSS3ScopedCacheHash`.
 
@@ -61,6 +62,8 @@ Responsibilities:
 
 - Resolve virtual paths into S3 object keys.
 - Upload/download/delete/list operations.
+- Bridge asynchronous AWS SDK operations into Umbraco's synchronous `IFileSystem` contract inside the shared exception-mapping boundary.
+- Translate S3 HTTP 404 responses to `FileNotFoundException` while preserving authorization failures.
 - Validate supported raster image payloads before write.
 - Bypass ImageSharp validation for image formats that are not decoded by the bundled decoders, including SVG.
 - Cache maintenance on media delete (mirrored cache + transformed cache paths).
@@ -86,7 +89,9 @@ Responsibilities:
 
 Responsibilities:
 
-- Resolve source media streams for ImageSharp.
+- Resolve source media streams for ImageSharp with one per-object metadata lookup.
+- Return no resolver for missing S3 keys so the remaining middleware pipeline can produce HTTP 404.
+- Reuse resolved metadata and avoid redundant bucket and metadata requests.
 - Persist transformed images in S3 cache.
 - Apply retention cleanup policy.
 

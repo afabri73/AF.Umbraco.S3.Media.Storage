@@ -33,6 +33,7 @@
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.101" />
     <PackageReference Include="AWSSDK.S3" Version="4.0.102" />
     <PackageReference Include="SixLabors.ImageSharp.Web.Providers.AWS" Version="3.2.0" />
+    <PackageReference Include="Umbraco.Cms.Imaging.ImageSharp" Version="[15.0.0,19.0.0)" />
     <PackageReference Include="Umbraco.Cms.Web.Common" Version="[15.0.0,19.0.0)" />
   </ItemGroup>
   <ItemGroup>
